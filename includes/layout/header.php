@@ -12,6 +12,9 @@ $seo = array_merge([
     'image' => abs_url('assets/img/okie-logo-hero.png'),
 ], $seo ?? []);
 
+$cssVer  = @filemtime(SITE_ROOT . '/assets/css/styles.css') ?: '1';
+$isHome  = current_path() === '/';
+
 $pageTitle = build_title($seo['title']);
 $canonical = abs_url($seo['path']);
 $jsonLd    = $seo['jsonLd'] ?? local_business_jsonld();
@@ -34,14 +37,14 @@ $navLinks = [
 ];
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <?php if (GA_MEASUREMENT_ID !== ''): ?>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=<?= e(GA_MEASUREMENT_ID) ?>"></script>
   <script>
+    /* gtag queue is available immediately; the 100 KB library itself is fetched
+       after load (or on first interaction) so it never competes with LCP. */
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
@@ -71,10 +74,13 @@ $navLinks = [
   <meta name="twitter:description" content="<?= e($seo['description']) ?>">
   <meta name="twitter:image" content="<?= e($seo['image']) ?>">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/styles.css?v=<?= @filemtime(SITE_ROOT . '/assets/css/styles.css') ?: '1' ?>">
+  <link rel="preload" as="style" href="/assets/css/styles.css?v=<?= $cssVer ?>">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=<?= $cssVer ?>">
+  <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter-latin-var.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/jakarta-latin-var.woff2" crossorigin>
+<?php if ($isHome): ?>
+  <link rel="preload" as="image" href="/assets/img/okie-logo-hero-640.webp" imagesrcset="/assets/img/okie-logo-hero-640.webp 640w, /assets/img/okie-logo-hero.webp 1024w" imagesizes="(max-width: 640px) 90vw, 1024px" fetchpriority="high">
+<?php endif; ?>
 
   <script type="application/ld+json"><?= json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
 <?php if (!empty($seo['extraJsonLd'])): ?>
@@ -94,7 +100,7 @@ $navLinks = [
 <header class="site-header" id="site-header">
   <div class="container header-inner">
     <a href="/" class="logo-link" aria-label="Okie Heating and Cooling home">
-      <img src="/assets/img/okie-logo-nav.png" alt="Okie Heating and Cooling" class="logo-img" width="500" height="200">
+      <img src="/assets/img/okie-logo-nav-260.webp" srcset="/assets/img/okie-logo-nav-260.webp 260w, /assets/img/okie-logo-nav-400.webp 400w" sizes="(max-width: 768px) 160px, 250px" alt="Okie Heating and Cooling" class="logo-img" width="500" height="200" fetchpriority="high" decoding="async">
     </a>
 
     <nav class="desktop-nav" aria-label="Primary">
@@ -134,7 +140,7 @@ $navLinks = [
 <aside class="mobile-menu" id="mobile-menu" aria-label="Mobile menu" aria-hidden="true">
   <div class="mobile-menu-inner">
     <div class="mobile-menu-top">
-      <img src="/assets/img/okie-logo-nav.png" alt="Okie Heating and Cooling" class="logo-img-sm">
+      <img src="/assets/img/okie-logo-nav-260.webp" alt="Okie Heating and Cooling" class="logo-img-sm" width="500" height="200" loading="lazy" decoding="async">
       <button type="button" class="btn btn-ghost btn-icon" id="mobile-menu-close" aria-label="Close menu"><?= icon('x', 'icon') ?></button>
     </div>
     <nav class="mobile-nav">

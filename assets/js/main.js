@@ -69,7 +69,11 @@
   });
 
   /* ---------- Scroll reveal ---------- */
-  var reveals = document.querySelectorAll('.reveal');
+  /* Hero reveals animate in pure CSS, so the observer only handles what is below the fold. */
+  var reveals = Array.prototype.filter.call(
+    document.querySelectorAll('.reveal'),
+    function (el) { return !el.closest('.hero'); }
+  );
   if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-visible'); io.unobserve(en.target); } });
@@ -181,5 +185,6 @@
       }
     } catch (e) { /* never block UX */ }
   }
-  track('page_view');
+  if ('requestIdleCallback' in window) requestIdleCallback(function () { track('page_view'); }, { timeout: 4000 });
+  else setTimeout(function () { track('page_view'); }, 1200);
 })();

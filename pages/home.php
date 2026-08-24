@@ -30,7 +30,7 @@ require SITE_ROOT . '/includes/layout/header.php';
       <div class="hero-badges reveal" data-delay="4"><?php component('trust-badges', ['variant' => 'compact']); ?></div>
     </div>
     <div class="hero-logo reveal" data-delay="2">
-      <img src="/assets/img/okie-logo-hero.png" alt="Okie Heating and Cooling" width="1024" height="409">
+      <img src="/assets/img/okie-logo-hero.webp" srcset="/assets/img/okie-logo-hero-640.webp 640w, /assets/img/okie-logo-hero.webp 1024w" sizes="(max-width: 640px) 90vw, 1024px" alt="Okie Heating and Cooling" width="1024" height="409" fetchpriority="high" decoding="async">
     </div>
   </div>
 </section>

@@ -4,7 +4,7 @@
   <div class="container footer-grid">
     <div class="footer-brand">
       <div class="footer-logo-wrap">
-        <img src="/assets/img/okie-logo-nav.png" alt="Okie Heating and Cooling" class="footer-logo">
+        <img src="/assets/img/okie-logo-nav-260.webp" alt="Okie Heating and Cooling" class="footer-logo" width="500" height="200" loading="lazy" decoding="async">
       </div>
       <p class="footer-tagline">Tulsa's trusted HVAC professionals. Keeping homes and businesses comfortable year-round with honest, quality service.</p>
       <div class="footer-contact">
@@ -62,5 +62,27 @@
 <div class="mobile-cta-spacer"></div>
 
 <script src="/assets/js/main.js?v=<?= @filemtime(SITE_ROOT . '/assets/js/main.js') ?: '1' ?>" defer></script>
+<?php if (GA_MEASUREMENT_ID !== ''): ?>
+<script>
+  /* Load gtag.js once the page is interactive — or sooner if the visitor acts.
+     Events fired before this land in dataLayer and replay on load. */
+  (function () {
+    var loaded = false;
+    function loadGa() {
+      if (loaded) return;
+      loaded = true;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=<?= e(GA_MEASUREMENT_ID) ?>';
+      document.head.appendChild(s);
+    }
+    ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(function (ev) {
+      window.addEventListener(ev, loadGa, { once: true, passive: true });
+    });
+    if (document.readyState === 'complete') setTimeout(loadGa, 1500);
+    else window.addEventListener('load', function () { setTimeout(loadGa, 1500); });
+  })();
+</script>
+<?php endif; ?>
 </body>
 </html>

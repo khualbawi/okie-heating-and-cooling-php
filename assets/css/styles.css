@@ -3,9 +3,46 @@
    Hand-written port of the Tailwind/shadcn design (no build step needed).
    ===================================================================== */
 
+/* ---------------------------------------------------------------------
+   Self-hosted variable fonts (latin + latin-ext). Served from our own origin so
+   there is no extra DNS/TLS handshake to fonts.googleapis.com on first paint.
+   --------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url('/assets/fonts/inter-latin-var.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url('/assets/fonts/inter-latin-ext-var.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('/assets/fonts/jakarta-latin-var.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('/assets/fonts/jakarta-latin-ext-var.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 :root {
-  --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --bg: hsl(210 25% 97%);
   --fg: hsl(218 60% 12%);
@@ -487,4 +524,44 @@ a.contact-row:hover .muted { color: var(--fg); }
   .reveal { opacity: 1; transform: none; transition: none; }
   html { scroll-behavior: auto; }
   .mobile-menu { transition: none; }
+}
+
+/* ---------------------------------------------------------------------
+   Below-the-fold rendering: let the browser skip layout/paint for sections
+   that are still off-screen. contain-intrinsic-size keeps the scrollbar and
+   anchor offsets stable so this costs no layout shift.
+   --------------------------------------------------------------------- */
+@supports (content-visibility: auto) {
+  .section:not(:first-of-type),
+  .seo-block,
+  .site-footer {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 600px;
+  }
+}
+
+/* Never let an image cause layout shift or overflow. */
+img { max-width: 100%; height: auto; }
+
+/* ---------------------------------------------------------------------
+   Above-the-fold content must never wait on JavaScript. Hero elements are
+   painted at full opacity immediately (transform-only entrance animation, which
+   does not delay LCP); only below-the-fold `.reveal` blocks use the observer.
+   --------------------------------------------------------------------- */
+.hero .reveal,
+.emergency-strip .reveal,
+.site-header .reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
+  animation: hero-rise .5s cubic-bezier(.22, 1, .36, 1) both;
+}
+.hero .reveal[data-delay="1"] { animation-delay: .06s; }
+.hero .reveal[data-delay="2"] { animation-delay: .12s; }
+.hero .reveal[data-delay="3"] { animation-delay: .18s; }
+.hero .reveal[data-delay="4"] { animation-delay: .24s; }
+@keyframes hero-rise { from { transform: translateY(18px); } to { transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero .reveal { animation: none; }
 }

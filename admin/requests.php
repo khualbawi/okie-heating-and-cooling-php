@@ -21,6 +21,15 @@ if ($user !== 'admin' || !hash_equals(ADMIN_PASSWORD, $pass)) {
     exit('Authentication required');
 }
 header('X-Robots-Tag: noindex, nofollow');
+header('Cache-Control: no-store');
+
+// Manual page-cache purge: /admin/requests.php?purge=1
+require SITE_ROOT . '/includes/cache.php';
+if (isset($_GET['purge'])) {
+    $n = page_cache_purge();
+    header('Location: /admin/requests.php?purged=' . $n, true, 303);
+    exit;
+}
 
 // --- Load rows ---------------------------------------------------------------
 $rows = [];
@@ -78,6 +87,10 @@ select{font:inherit;padding:.125rem}
 <h1>Service Requests <span class="muted">(<?= count($rows) ?>, source: <?= $source ?>)</span></h1>
 <div class="bar">
   <a href="?csv=1">⬇ Export CSV</a>
+  <a href="?purge=1">♻ Purge page cache</a>
+<?php if (isset($_GET['purged'])): ?>
+  <span class="muted">Cleared <?= (int) $_GET['purged'] ?> cached page(s).</span>
+<?php endif; ?>
   <a href="/">← Back to site</a>
 </div>
 <div class="wrap">

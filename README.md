@@ -73,3 +73,40 @@ php -S localhost:8080 router-dev.php
 | Admin → Integrations (ServiceFusion OAuth) | Not ported — ServiceFusion sync was Base44-specific. `/admin/requests.php` + CSV export instead |
 | `weeklyReport` function | Not ported (can be recreated as a cron PHP script reading `site_events`) |
 | Google-hosted images on media.base44.com | Copied to `assets/img/` |
+
+## Performance / caching
+
+The site is tuned to render fast on mobile connections. What is in place:
+
+**Full-page caching (two layers)**
+
+1. **LiteSpeed** — `.htaccess` sends `CacheLookup on` plus per-request `Cache-Control`
+   env vars, and `includes/cache.php` emits `X-LiteSpeed-Cache-Control: public,max-age=86400`.
+   On a hit LiteSpeed answers from RAM and PHP never runs.
+   *Enable "LiteSpeed Cache" for the domain in hPanel — without that the rules are inert.*
+2. **PHP file cache** (`includes/cache.php`) — a fallback for LiteSpeed misses: rendered
+   HTML lands in `storage/cache/` and is replayed with `readfile()`. Also sends
+   `ETag` / `Last-Modified` so repeat visits get a 304.
+
+Not cached: `POST`, `/api/*`, `/admin/*`, authenticated requests, `sitemap.xml`, and
+any non-200 response.
+
+**Invalidation** — the cache key includes a build id derived from the mtimes of
+`data.php`, `helpers.php`, `icons.php`, the layout files, `styles.css`, `main.js` and
+`config.php`. Deploying any of those invalidates every cached page automatically.
+Manual purge: `/admin/requests.php?purge=1`. Kill switch: `PAGE_CACHE=0` in `.env`.
+Response header `X-Page-Cache: HIT|MISS` shows what happened.
+
+**Front-end**
+
+- Fonts are self-hosted variable woff2 (`assets/fonts/`) — no `fonts.googleapis.com`
+  round-trip. Latin files are preloaded; latin-ext loads only if the text needs it.
+- `gtag.js` loads after `load` (or on first interaction); the `gtag()` queue exists
+  immediately so no events are lost.
+- Logos are WebP with `srcset`; the home hero is preloaded with `fetchpriority=high`.
+- Hero content is painted at full opacity with a CSS-only entrance animation, so LCP
+  never waits on `main.js`. Only below-the-fold `.reveal` blocks use IntersectionObserver.
+- Below-the-fold sections use `content-visibility: auto` with an intrinsic size.
+- Page-view telemetry fires on `requestIdleCallback`.
+- Static assets: `Cache-Control: immutable`, 1 year; CSS/JS are cache-busted with `?v=<mtime>`.
+- Brotli (falling back to gzip) for all text responses.
