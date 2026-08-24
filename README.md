@@ -88,8 +88,9 @@ The site is tuned to render fast on mobile connections. What is in place:
    HTML lands in `storage/cache/` and is replayed with `readfile()`. Also sends
    `ETag` / `Last-Modified` so repeat visits get a 304.
 
-Not cached: `POST`, `/api/*`, `/admin/*`, authenticated requests, `sitemap.xml`, and
-any non-200 response.
+Not cached anywhere — origin, LiteSpeed or CDN: `POST`, `/book` (live booking data),
+`/api/*`, `/admin/*`, authenticated requests, `sitemap.xml`, and any non-200 response.
+Those responses carry `Cache-Control: private, no-store` plus `CDN-Cache-Control: no-store`.
 
 **Invalidation** — the cache key includes a build id derived from the mtimes of
 `data.php`, `helpers.php`, `icons.php`, the layout files, `styles.css`, `main.js` and
@@ -110,3 +111,8 @@ Response header `X-Page-Cache: HIT|MISS` shows what happened.
 - Page-view telemetry fires on `requestIdleCallback`.
 - Static assets: `Cache-Control: immutable`, 1 year; CSS/JS are cache-busted with `?v=<mtime>`.
 - Brotli (falling back to gzip) for all text responses.
+
+**Cloudflare CDN** — see `cloudflare/README.md`. Cacheable pages send
+`CDN-Cache-Control` (1 day at the edge, independent of the 10-minute browser TTL) and
+`Cache-Tag` for targeted purges; `cloudflare/cache-rules.json` + `apply.sh` deploy the
+matching zone rules, `purge.sh` clears the edge after a deploy.

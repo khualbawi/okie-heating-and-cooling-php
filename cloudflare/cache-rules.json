@@ -1,0 +1,41 @@
+{
+  "name": "Okie cache policy",
+  "description": "Edge-cache the static marketing pages, never cache live or private paths",
+  "kind": "zone",
+  "phase": "http_request_cache_settings",
+  "rules": [
+    {
+      "description": "Cache HTML pages at the edge; origin sets the TTL via CDN-Cache-Control",
+      "expression": "(http.request.method in {\"GET\" \"HEAD\"})",
+      "action": "set_cache_settings",
+      "action_parameters": {
+        "cache": true,
+        "edge_ttl": { "mode": "respect_origin" },
+        "browser_ttl": { "mode": "respect_origin" },
+        "respect_strong_etags": true,
+        "serve_stale": { "disable_stale_while_updating": false },
+        "cache_key": {
+          "ignore_query_strings_order": true,
+          "cache_deception_armor": true
+        }
+      }
+    },
+    {
+      "description": "Static assets: one year at the edge (filenames and ?v= are versioned)",
+      "expression": "(starts_with(http.request.uri.path, \"/assets/\"))",
+      "action": "set_cache_settings",
+      "action_parameters": {
+        "cache": true,
+        "edge_ttl": { "mode": "override_origin", "default": 31536000 },
+        "browser_ttl": { "mode": "override_origin", "default": 31536000 },
+        "respect_strong_etags": true
+      }
+    },
+    {
+      "description": "Never cache: live booking page, form/telemetry API, admin inbox, writes",
+      "expression": "(starts_with(http.request.uri.path, \"/book\") or starts_with(http.request.uri.path, \"/api\") or starts_with(http.request.uri.path, \"/admin\") or not http.request.method in {\"GET\" \"HEAD\"})",
+      "action": "set_cache_settings",
+      "action_parameters": { "cache": false }
+    }
+  ]
+}

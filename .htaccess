@@ -39,8 +39,10 @@ DirectoryIndex index.php
   RewriteCond %{REQUEST_METHOD} !^(GET|HEAD)$
   RewriteRule .* - [E=Cache-Control:no-cache]
 
-  # Never cache the admin inbox, the form/telemetry endpoints, or authed requests.
-  RewriteCond %{REQUEST_URI} ^/(admin|api)/ [NC]
+  # Never cache the admin inbox, the form/telemetry endpoints, the live booking
+  # page, or authed requests.
+  RewriteCond %{REQUEST_URI} ^/(admin|api)(/|$) [NC,OR]
+  RewriteCond %{REQUEST_URI} ^/book(/|$) [NC]
   RewriteRule .* - [E=Cache-Control:no-cache]
 
   RewriteCond %{HTTP:Authorization} .
@@ -49,7 +51,7 @@ DirectoryIndex index.php
   # Public pages: 1 day in the LiteSpeed cache. PHP re-asserts this per response
   # via X-LiteSpeed-Cache-Control (includes/cache.php), which wins when present.
   RewriteRule ^$ - [E=Cache-Control:max-age=86400]
-  RewriteCond %{REQUEST_URI} !^/(admin|api)/ [NC]
+  RewriteCond %{REQUEST_URI} !^/(admin|api|book)(/|$) [NC]
   RewriteCond %{REQUEST_METHOD} ^(GET|HEAD)$
   RewriteRule .* - [E=Cache-Control:max-age=86400]
 </IfModule>
@@ -61,9 +63,12 @@ DirectoryIndex index.php
   Header set Referrer-Policy "strict-origin-when-cross-origin"
   Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
 
-  # Versioned assets (?v=<mtime>) are safe to cache forever.
+  # Versioned assets (?v=<mtime>) are safe to cache forever, in the browser and
+  # at the Cloudflare edge alike.
   <FilesMatch "\.(css|js|woff2|webp|avif|png|jpe?g|gif|svg|ico)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
+    Header set CDN-Cache-Control "public, max-age=31536000, immutable"
+    Header set Cache-Tag "asset"
     Header unset Pragma
   </FilesMatch>
 

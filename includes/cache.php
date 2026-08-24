@@ -15,6 +15,12 @@ declare(strict_types=1);
 const PAGE_CACHE_TTL = 86400;   // 1 day; build id busts it earlier on deploy
 const PAGE_CACHE_DIR = SITE_ROOT . '/storage/cache';
 
+/**
+ * Paths that must always hit PHP — never the local cache, never the Cloudflare edge.
+ * `/book` is here because it carries live booking data.
+ */
+const CACHE_BYPASS_PREFIXES = ['/admin', '/api', '/book'];
+
 /** Is this request cacheable at all? */
 function page_cache_enabled(): bool
 {
@@ -22,8 +28,8 @@ function page_cache_enabled(): bool
     if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET') return false;
     if (!empty($_SERVER['PHP_AUTH_USER'])) return false;          // admin
     $path = current_path();
-    foreach (['/admin', '/api'] as $prefix) {
-        if (str_starts_with($path, $prefix)) return false;
+    foreach (CACHE_BYPASS_PREFIXES as $prefix) {
+        if ($path === $prefix || str_starts_with($path, $prefix . '/')) return false;
     }
     // Cached responses are replayed as text/html, so only cache HTML pages.
     return $path !== '/sitemap.xml';
@@ -58,7 +64,7 @@ function page_cache_file(): string
 function page_cache_start(): void
 {
     if (!page_cache_enabled()) {
-        header('Cache-Control: no-cache, must-revalidate');
+        page_cache_no_store();
         return;
     }
 
@@ -116,11 +122,17 @@ function page_cache_send_headers(int $mtime): void
 {
     if (headers_sent()) return;
     $maxAge = 600;              // browser: 10 min
-    $shared = PAGE_CACHE_TTL;   // LiteSpeed / CDN: 1 day
-    header("Cache-Control: public, max-age=$maxAge, s-maxage=$shared, stale-while-revalidate=86400");
+    $shared = PAGE_CACHE_TTL;   // LiteSpeed / Cloudflare: 1 day
+
+    // Browsers get the short TTL; Cloudflare reads CDN-Cache-Control first and
+    // holds the page for a day, serving stale while it revalidates in background.
+    header("Cache-Control: public, max-age=$maxAge, stale-while-revalidate=86400");
+    header("CDN-Cache-Control: public, max-age=$shared, stale-while-revalidate=86400, stale-if-error=604800");
     header('X-LiteSpeed-Cache-Control: public,max-age=' . $shared);
-    $tag = trim(str_replace('/', '_', current_path()), '_');
-    header('X-LiteSpeed-Tag: page,' . ($tag === '' ? 'home' : $tag));
+
+    $tag = page_cache_tag();
+    header('X-LiteSpeed-Tag: page,' . $tag);
+    header('Cache-Tag: page,' . $tag . ',build-' . page_cache_build_id());  // Cloudflare purge-by-tag
     header('Vary: Accept-Encoding');
     header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $mtime) . ' GMT');
     header('ETag: "' . page_cache_build_id() . '-' . $mtime . '"');
@@ -134,12 +146,23 @@ function page_cache_not_modified(int $mtime): bool
     return $since !== '' && strtotime($since) >= $mtime;
 }
 
-/** Mark the current response uncacheable (404s, errors). */
+/** Purge tag for the current page ("home", "services_ac-repair", ...). */
+function page_cache_tag(): string
+{
+    $tag = trim(str_replace('/', '_', current_path()), '_');
+    return $tag === '' ? 'home' : $tag;
+}
+
+/** Mark the current response uncacheable (404s, errors, live pages). */
 function page_cache_no_store(): void
 {
     if (headers_sent()) return;
-    header('Cache-Control: no-cache, no-store, must-revalidate');
+    header('Cache-Control: private, no-cache, no-store, must-revalidate');
+    // Cloudflare reads this ahead of Cache-Control; no-store forces a full BYPASS.
+    header('CDN-Cache-Control: no-store');
     header('X-LiteSpeed-Cache-Control: no-cache');
+    header_remove('Cache-Tag');
+    header_remove('X-LiteSpeed-Tag');
     header_remove('ETag');
     header_remove('Last-Modified');
 }
