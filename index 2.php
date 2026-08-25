@@ -7,22 +7,12 @@ declare(strict_types=1);
 require __DIR__ . '/config.php';
 require __DIR__ . '/includes/helpers.php';
 require __DIR__ . '/includes/data.php';
-require __DIR__ . '/includes/cache.php';
 
 $path = current_path();
-
-// Full-page cache: serves a stored copy and exits on a hit, buffers on a miss.
-if ($path !== '/api/submit-request' && $path !== '/api/track') {
-    page_cache_start();
-}
 
 // --- API endpoints -----------------------------------------------------------
 if ($path === '/api/submit-request') {
     require SITE_ROOT . '/api/submit-request.php';
-    exit;
-}
-if ($path === '/api/requests') {
-    require SITE_ROOT . '/api/requests.php';
     exit;
 }
 if ($path === '/api/track') {

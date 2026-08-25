@@ -81,9 +81,6 @@ define('DB_NAME', env('DB_NAME', ''));
 define('DB_USER', env('DB_USER', ''));
 define('DB_PASS', env('DB_PASS', ''));
 
-// Token for the read-only /api/requests JSON feed (external portals). Empty = endpoint disabled.
-define('PORTAL_API_TOKEN', env('PORTAL_API_TOKEN', ''));
-
 // Simple admin page protection (admin/requests.php). Leave empty to disable the page.
 define('ADMIN_PASSWORD', env('ADMIN_PASSWORD', ''));
 

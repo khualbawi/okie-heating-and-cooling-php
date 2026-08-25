@@ -21,9 +21,6 @@ DB_NAME=
 DB_USER=
 DB_PASS=
 
-# Token for the read-only /api/requests JSON feed (e.g. for KWS portal). Empty = disabled.
-PORTAL_API_TOKEN=
-
 # Password for /admin/requests (HTTP Basic auth, user "admin"). Empty = page disabled.
 ADMIN_PASSWORD=
 
