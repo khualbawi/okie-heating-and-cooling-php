@@ -7,6 +7,10 @@ DirectoryIndex index.php
   RewriteEngine On
   RewriteBase /
 
+  # Pass Authorization header to PHP (needed for /api/requests Bearer auth)
+  RewriteCond %{HTTP:Authorization} .
+  RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
   # Force HTTPS + non-www (comment out if Hostinger already handles this)
   RewriteCond %{HTTPS} off [OR]
   RewriteCond %{HTTP_HOST} ^www\. [NC]

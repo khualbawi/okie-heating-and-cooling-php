@@ -26,11 +26,32 @@ if (PORTAL_API_TOKEN === '') {
     echo json_encode(['error' => 'Not found']);
     exit;
 }
-$auth = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
-$given = str_starts_with($auth, 'Bearer ') ? substr($auth, 7) : (string) ($_GET['token'] ?? '');
+// --- Failed-auth throttle: max 20 bad attempts per IP per 10 minutes ------
+$ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+$throttleFile = SITE_ROOT . '/storage/api-auth-fails.json';
+$fails = [];
+if (is_readable($throttleFile)) {
+    $fails = json_decode((string) file_get_contents($throttleFile), true) ?: [];
+}
+$now = time();
+$fails = array_filter($fails, fn($t) => is_array($t) && ($t['ts'] ?? 0) > $now - 600);
+$ipFails = count(array_filter($fails, fn($t) => ($t['ip'] ?? '') === $ip));
+if ($ipFails >= 20) {
+    http_response_code(429);
+    header('Retry-After: 600');
+    echo json_encode(['error' => 'Too many attempts']);
+    exit;
+}
+
+// Header-only auth: Authorization: Bearer <token>. Query-string tokens are NOT
+// accepted (they leak into access logs, browser history, and Referer headers).
+$auth = $_SERVER['HTTP_AUTHORIZATION'] ?? ($_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '');
+$given = str_starts_with($auth, 'Bearer ') ? substr($auth, 7) : '';
 if ($given === '' || !hash_equals(PORTAL_API_TOKEN, $given)) {
+    $fails[] = ['ip' => $ip, 'ts' => $now];
+    @file_put_contents($throttleFile, json_encode(array_values($fails)), LOCK_EX);
     http_response_code(401);
-    echo json_encode(['error' => 'Unauthorized']);
+    echo json_encode(['error' => 'Unauthorized. Use Authorization: Bearer <token> header.']);
     exit;
 }
 
