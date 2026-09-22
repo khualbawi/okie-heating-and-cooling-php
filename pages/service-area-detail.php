@@ -28,8 +28,6 @@ require SITE_ROOT . '/includes/layout/header.php';
   </div>
 </section>
 
-<section class="trust-bar"><div class="container"><?php component('trust-badges'); ?></div></section>
-
 <section class="section">
   <div class="container-md reveal">
     <h2 class="h2 text-center mb-8">Why <?= e($area['name']) ?> Chooses Okie Heating and Cooling</h2>
@@ -72,8 +70,6 @@ require SITE_ROOT . '/includes/layout/header.php';
     <?php endif; ?>
   </div>
 </section>
-
-<section class="seo-block"><div class="container-sm"><p class="small muted leading-relaxed"><?= e($area['seoText']) ?></p></div></section>
 
 <?php component('cta-banner', ['variant' => 'dark', 'headline' => 'Ready for HVAC Service in ' . $area['name'] . '?', 'subheadline' => 'Book online or call us for fast, reliable heating and cooling service in ' . $area['name'] . ', Oklahoma.']); ?>
 <?php require SITE_ROOT . '/includes/layout/footer.php'; ?>
