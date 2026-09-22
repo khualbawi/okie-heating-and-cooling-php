@@ -53,6 +53,14 @@ sitemap.php, robots.txt
 6. **DNS**: point the domain at Hostinger, enable free SSL in hPanel. The `.htaccess`
    forces HTTPS + non-www — if Hostinger's own redirect is on, you can remove that block.
 7. **Search Console**: resubmit `https://okieheatingandcooling.com/sitemap.xml`.
+8. **Purge caches after every deploy** — new HTML is invisible until all three cache
+   layers clear:
+   ```bash
+   ADMIN_PASSWORD=... ./scripts/post-deploy-purge.sh https://okieheatingandcooling.com
+   ```
+   Clears the app file cache + LiteSpeed edge, and the Cloudflare edge if
+   `CF_API_TOKEN`/`CF_ZONE_ID` are set. (The app cache also self-busts on deploy via
+   its build id — see below — but LiteSpeed and Cloudflare don't know about that.)
 
 ## Local dev
 
@@ -89,14 +97,23 @@ The site is tuned to render fast on mobile connections. What is in place:
    `ETag` / `Last-Modified` so repeat visits get a 304.
 
 Not cached anywhere — origin, LiteSpeed or CDN: `POST`, `/book` (live booking data),
-`/api/*`, `/admin/*`, authenticated requests, `sitemap.xml`, and any non-200 response.
-Those responses carry `Cache-Control: private, no-store` plus `CDN-Cache-Control: no-store`.
+`/api/*`, `/admin/*`, authenticated requests, `sitemap.xml`, any non-200 response, and
+**any page that rendered the request form** (home, `/contact`, `/maintenance-plan`, or
+any future page using `component('service-request-form', ...)`). That last one is
+detected automatically — `component()` flags the response the moment the form
+component runs, so no page needs a hardcoded bypass list — because the form embeds a
+`_ts` freshness token that must not go stale in a cached copy. Those responses carry
+`Cache-Control: private, no-store` plus `CDN-Cache-Control: no-store` and
+`X-LiteSpeed-Cache-Control: no-cache`.
 
 **Invalidation** — the cache key includes a build id derived from the mtimes of
-`data.php`, `helpers.php`, `icons.php`, the layout files, `styles.css`, `main.js` and
-`config.php`. Deploying any of those invalidates every cached page automatically.
-Manual purge: `/admin/requests.php?purge=1`. Kill switch: `PAGE_CACHE=0` in `.env`.
-Response header `X-Page-Cache: HIT|MISS` shows what happened.
+`data.php`, `helpers.php`, `icons.php`, the layout files, `styles.css`, `main.js`,
+`config.php`, every `pages/*.php` and every `includes/components/*.php`. Deploying any
+of those invalidates every cached page automatically (app layer only — LiteSpeed and
+Cloudflare still need an explicit purge, see "Deploy to Hostinger" above).
+Manual purge: `/admin/requests.php?purge=1` (also sends `X-LiteSpeed-Purge: *`).
+Kill switch: `PAGE_CACHE=0` in `.env`. Response header `X-Page-Cache: HIT|MISS` shows
+what happened.
 
 **Front-end**
 

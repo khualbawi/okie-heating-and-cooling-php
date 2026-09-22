@@ -15,6 +15,9 @@ $benefits = [
 ];
 $enrolled = ($_GET['submitted'] ?? '') === '1';
 $enrollError = $_GET['error'] ?? '';
+// Inline form (not the shared component) — mark dynamic manually so a cached copy
+// can't serve a stale `_ts` freshness token or someone else's ?submitted=1 state.
+page_cache_mark_dynamic();
 require SITE_ROOT . '/includes/layout/header.php';
 ?>
 <section class="hero hero-center">

@@ -88,8 +88,9 @@ function page_cache_start(): void
     }
 
     ob_start(function (string $html): string {
-        if ($html === '' || http_response_code() !== 200) {
-            // 404s and errors must not be cached anywhere.
+        if ($html === '' || http_response_code() !== 200 || page_cache_is_dynamic()) {
+            // 404s, errors, and pages that turned out to carry a live form must not
+            // be cached anywhere.
             page_cache_no_store();
             return $html;
         }
@@ -98,6 +99,23 @@ function page_cache_start(): void
     });
     page_cache_send_headers(time());
     header('X-Page-Cache: MISS');
+}
+
+/**
+ * Mark the current response uncacheable after headers were already sent as
+ * cacheable. Call this from anywhere a live form renders (e.g. `component()`
+ * for 'service-request-form'). Safe to call more than once; output is still
+ * buffered at this point, so re-sending headers still wins.
+ */
+function page_cache_mark_dynamic(): void
+{
+    $GLOBALS['__page_cache_dynamic'] = true;
+    page_cache_no_store();
+}
+
+function page_cache_is_dynamic(): bool
+{
+    return $GLOBALS['__page_cache_dynamic'] ?? false;
 }
 
 function page_cache_write(string $html): void

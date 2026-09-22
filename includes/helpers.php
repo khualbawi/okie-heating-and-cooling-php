@@ -37,6 +37,11 @@ function build_title(?string $pageTitle): string
 /** Render a component/partial with scoped variables. */
 function component(string $name, array $vars = []): void
 {
+    // The request-form component carries a `_ts` freshness token: a cached copy
+    // would serve a stale one and start rejecting real submissions.
+    if ($name === 'service-request-form') {
+        page_cache_mark_dynamic();
+    }
     extract($vars, EXTR_SKIP);
     include SITE_ROOT . "/includes/components/$name.php";
 }

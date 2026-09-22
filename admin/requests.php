@@ -23,10 +23,12 @@ if ($user !== 'admin' || !hash_equals(ADMIN_PASSWORD, $pass)) {
 header('X-Robots-Tag: noindex, nofollow');
 header('Cache-Control: no-store');
 
-// Manual page-cache purge: /admin/requests.php?purge=1
+// Manual full purge: /admin/requests.php?purge=1
+// Clears the app file cache and, via the response header, the LiteSpeed edge cache.
 require SITE_ROOT . '/includes/cache.php';
 if (isset($_GET['purge'])) {
     $n = page_cache_purge();
+    header('X-LiteSpeed-Purge: *');
     header('Location: /admin/requests.php?purged=' . $n, true, 303);
     exit;
 }

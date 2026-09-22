@@ -7,11 +7,16 @@ directory holds the zone-side config.
 
 | Path | Cloudflare edge | Browser | Why |
 |---|---|---|---|
-| `/`, `/services/*`, `/service-areas/*`, `/about`, `/contact`, `/reviews`, `/financing`, `/maintenance-plan` | 1 day | 10 min | static marketing content |
+| `/services/*`, `/service-areas/*`, `/about`, `/reviews`, `/financing` | 1 day | 10 min | static marketing content |
+| `/`, `/contact`, `/maintenance-plan` | **never** | **never** | **render the request form — carries a `_ts` freshness token** |
 | `/assets/*` (css, js, fonts, webp) | 1 year, immutable | 1 year | versioned filenames + `?v=<mtime>` |
 | **`/book`** | **never** | **never** | **live booking data** |
 | `/api/*`, `/admin/*`, any non-GET | never | never | form posts, telemetry, lead inbox |
 | `/sitemap.xml`, 404s, 5xx | never | never | generated / error responses |
+
+Whether a path renders the form is detected at runtime (see main `README.md` →
+Performance / caching), not hardcoded here — the edge just respects whatever
+`CDN-Cache-Control` the origin sends for that request.
 
 The origin drives this with two headers (`includes/cache.php`):
 
