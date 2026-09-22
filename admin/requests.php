@@ -13,9 +13,24 @@ if (ADMIN_PASSWORD === '') {
     http_response_code(404);
     exit('Not found');
 }
+
+// --- Failed-auth throttle: max 10 bad attempts per IP per 15 minutes ---------
+$ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+$throttleFile = SITE_ROOT . '/storage/admin-auth-fails.json';
+$fails = is_readable($throttleFile) ? (json_decode((string) file_get_contents($throttleFile), true) ?: []) : [];
+$now = time();
+$fails = array_values(array_filter($fails, fn($t) => is_array($t) && ($t['ts'] ?? 0) > $now - 900));
+if (count(array_filter($fails, fn($t) => ($t['ip'] ?? '') === $ip)) >= 10) {
+    http_response_code(429);
+    header('Retry-After: 900');
+    exit('Too many attempts. Try again later.');
+}
+
 $user = $_SERVER['PHP_AUTH_USER'] ?? '';
 $pass = $_SERVER['PHP_AUTH_PW'] ?? '';
 if ($user !== 'admin' || !hash_equals(ADMIN_PASSWORD, $pass)) {
+    $fails[] = ['ip' => $ip, 'ts' => $now];
+    @file_put_contents($throttleFile, json_encode($fails), LOCK_EX);
     header('WWW-Authenticate: Basic realm="Okie Admin"');
     http_response_code(401);
     exit('Authentication required');

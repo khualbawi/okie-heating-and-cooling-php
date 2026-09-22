@@ -51,6 +51,19 @@ if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
     if (is_array($json)) $_POST = $json + $_POST;
 }
 
+// --- Rate limit: max 8 submissions per IP per hour (defense in depth behind
+// Turnstile — a solved captcha shouldn't buy unlimited lead-inbox/email spam) ---
+$ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+$rateFile = SITE_ROOT . '/storage/submit-rate.json';
+$hits = is_readable($rateFile) ? (json_decode((string) file_get_contents($rateFile), true) ?: []) : [];
+$now = time();
+$hits = array_values(array_filter($hits, fn($t) => is_array($t) && ($t['ts'] ?? 0) > $now - 3600));
+if (count(array_filter($hits, fn($t) => ($t['ip'] ?? '') === $ip)) >= 8) {
+    $respond(false, 'Too many requests. Please call us at ' . PHONE_NUMBER . '.', [], 429);
+}
+$hits[] = ['ip' => $ip, 'ts' => $now];
+@file_put_contents($rateFile, json_encode($hits), LOCK_EX);
+
 $in = fn(string $k, int $max = 500) => mb_substr(trim((string) ($_POST[$k] ?? '')), 0, $max);
 
 // --- Spam checks ------------------------------------------------------------
