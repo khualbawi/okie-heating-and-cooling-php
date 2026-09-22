@@ -4,7 +4,7 @@ declare(strict_types=1);
 /** Verify a Cloudflare Turnstile response token server-side. Fails closed. */
 function verify_turnstile(string $token, string $ip): bool
 {
-    if ($token === '') {
+    if (!TURNSTILE_CONFIGURED || $token === '') {
         return false;
     }
     $ch = curl_init('https://challenges.cloudflare.com/turnstile/v0/siteverify');

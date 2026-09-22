@@ -125,13 +125,17 @@ $formError = $_GET['error'] ?? '';
     <label for="<?= $uid ?>-consent">I consent to receiving communications from Okie Heating and Cooling regarding my service request.</label>
   </div>
 
-  <div class="cf-turnstile" data-sitekey="<?= e(TURNSTILE_SITE_KEY) ?>"></div>
+  <?php if (TURNSTILE_CONFIGURED): ?>
+    <div class="cf-turnstile" data-sitekey="<?= e(TURNSTILE_SITE_KEY) ?>" data-size="flexible" data-theme="light"></div>
 
-  <button type="submit" class="btn btn-accent btn-lg btn-block" data-submit-btn>
-    <span class="btn-spinner" hidden><?= icon('loader', 'icon-sm spin') ?></span>
-    <span class="btn-arrow"><?= icon('arrow-right', 'icon-sm') ?></span>
-    <span data-submit-label>Submit Request</span>
-  </button>
+    <button type="submit" class="btn btn-accent btn-lg btn-block" data-submit-btn>
+      <span class="btn-spinner" hidden><?= icon('loader', 'icon-sm spin') ?></span>
+      <span class="btn-arrow"><?= icon('arrow-right', 'icon-sm') ?></span>
+      <span data-submit-label>Submit Request</span>
+    </button>
+  <?php else: ?>
+    <p class="form-alert" role="alert">Online booking is temporarily unavailable — please call <?= e(PHONE_NUMBER) ?>.</p>
+  <?php endif; ?>
 </form>
 <template data-success-template>
   <div class="form-success">

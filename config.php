@@ -90,13 +90,26 @@ define('ADMIN_PASSWORD', env('ADMIN_PASSWORD', ''));
 // Google Analytics 4 measurement ID (empty = tag not rendered)
 define('GA_MEASUREMENT_ID', env('GA_MEASUREMENT_ID', 'G-JJHZYP8C4G'));
 
-// Cloudflare Turnstile. Falls back to Cloudflare's always-pass test keys when unset
-// so local dev works out of the box — never rely on that fallback in production.
-if (env('TURNSTILE_SITE_KEY', '') === '' || env('TURNSTILE_SECRET_KEY', '') === '') {
-    error_log('Turnstile: TURNSTILE_SITE_KEY/TURNSTILE_SECRET_KEY not set — using Cloudflare test keys (always pass). Set real keys before production.');
+define('APP_ENV', env('APP_ENV', 'production'));
+define('IS_LOCAL_ENV', APP_ENV === 'local'
+    || in_array(explode(':', $_SERVER['HTTP_HOST'] ?? '')[0], ['localhost', '127.0.0.1'], true));
+
+// Cloudflare Turnstile. Missing keys fall back to Cloudflare's always-pass test keys
+// ONLY in a local env — anywhere else, forms fail closed (see TURNSTILE_CONFIGURED).
+$turnstileSiteKey = env('TURNSTILE_SITE_KEY', '');
+$turnstileSecretKey = env('TURNSTILE_SECRET_KEY', '');
+if ($turnstileSiteKey === '' || $turnstileSecretKey === '') {
+    if (IS_LOCAL_ENV) {
+        error_log('Turnstile: TURNSTILE_SITE_KEY/TURNSTILE_SECRET_KEY not set — using Cloudflare test keys (always pass). Set real keys before production.');
+        $turnstileSiteKey = '1x00000000000000000000AA';
+        $turnstileSecretKey = '1x0000000000000000000000000000000AA';
+    } else {
+        error_log('TURNSTILE KEYS MISSING — forms disabled');
+    }
 }
-define('TURNSTILE_SITE_KEY', env('TURNSTILE_SITE_KEY', '1x00000000000000000000AA'));
-define('TURNSTILE_SECRET_KEY', env('TURNSTILE_SECRET_KEY', '1x0000000000000000000000000000000AA'));
+define('TURNSTILE_SITE_KEY', $turnstileSiteKey);
+define('TURNSTILE_SECRET_KEY', $turnstileSecretKey);
+define('TURNSTILE_CONFIGURED', $turnstileSiteKey !== '' && $turnstileSecretKey !== '');
 
 // Telemetry (page views) — only stored when a database is configured.
 define('TRACK_PAGE_VIEWS', env('TRACK_PAGE_VIEWS', '1') === '1');
