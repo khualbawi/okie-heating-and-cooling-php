@@ -125,6 +125,8 @@ $formError = $_GET['error'] ?? '';
     <label for="<?= $uid ?>-consent">I consent to receiving communications from Okie Heating and Cooling regarding my service request.</label>
   </div>
 
+  <div class="cf-turnstile" data-sitekey="<?= e(TURNSTILE_SITE_KEY) ?>"></div>
+
   <button type="submit" class="btn btn-accent btn-lg btn-block" data-submit-btn>
     <span class="btn-spinner" hidden><?= icon('loader', 'icon-sm spin') ?></span>
     <span class="btn-arrow"><?= icon('arrow-right', 'icon-sm') ?></span>

@@ -63,6 +63,7 @@
 <div class="mobile-cta-spacer"></div>
 
 <script src="/assets/js/main.js?v=<?= @filemtime(SITE_ROOT . '/assets/js/main.js') ?: '1' ?>" defer></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <?php if (GA_MEASUREMENT_ID !== ''): ?>
 <script>
   /* Load gtag.js once the page is interactive — or sooner if the visitor acts.

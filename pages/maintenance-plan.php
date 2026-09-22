@@ -93,6 +93,7 @@ require SITE_ROOT . '/includes/layout/header.php';
             <input required type="text" name="name" placeholder="Your Name" class="input-plain" aria-label="Your name">
             <input required type="tel" name="phone" placeholder="Phone Number" class="input-plain" aria-label="Phone number">
             <input type="email" name="email" placeholder="Email (optional)" class="input-plain" aria-label="Email">
+            <div class="cf-turnstile" data-sitekey="<?= e(TURNSTILE_SITE_KEY) ?>"></div>
             <button type="submit" class="btn btn-accent btn-lg btn-block" data-submit-btn>
               <span class="btn-spinner" hidden><?= icon('loader', 'icon-sm spin') ?></span>
               <span class="btn-arrow"><?= icon('send', 'icon-sm') ?></span>

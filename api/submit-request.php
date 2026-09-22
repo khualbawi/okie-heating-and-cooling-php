@@ -12,6 +12,7 @@ if (!defined('SITE_ROOT')) {
     require SITE_ROOT . '/includes/data.php';
 }
 require SITE_ROOT . '/includes/mailer.php';
+require SITE_ROOT . '/includes/turnstile.php';
 
 $isJson = str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json')
     || ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'fetch'
@@ -59,6 +60,9 @@ if ($in('website') !== '') {                       // honeypot filled -> pretend
 $ts = (int) ($_POST['_ts'] ?? 0);
 if ($ts > 0 && (time() - $ts) < 3) {               // submitted in < 3s
     $respond(false, 'Please take a moment and try again.', [], 422);
+}
+if (!verify_turnstile($in('cf-turnstile-response', 2000), $_SERVER['REMOTE_ADDR'] ?? '')) {
+    $respond(false, 'Please complete the verification and try again.', [], 422);
 }
 
 // --- Validate ----------------------------------------------------------------

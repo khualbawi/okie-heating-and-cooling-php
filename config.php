@@ -90,6 +90,14 @@ define('ADMIN_PASSWORD', env('ADMIN_PASSWORD', ''));
 // Google Analytics 4 measurement ID (empty = tag not rendered)
 define('GA_MEASUREMENT_ID', env('GA_MEASUREMENT_ID', 'G-JJHZYP8C4G'));
 
+// Cloudflare Turnstile. Falls back to Cloudflare's always-pass test keys when unset
+// so local dev works out of the box — never rely on that fallback in production.
+if (env('TURNSTILE_SITE_KEY', '') === '' || env('TURNSTILE_SECRET_KEY', '') === '') {
+    error_log('Turnstile: TURNSTILE_SITE_KEY/TURNSTILE_SECRET_KEY not set — using Cloudflare test keys (always pass). Set real keys before production.');
+}
+define('TURNSTILE_SITE_KEY', env('TURNSTILE_SITE_KEY', '1x00000000000000000000AA'));
+define('TURNSTILE_SECRET_KEY', env('TURNSTILE_SECRET_KEY', '1x0000000000000000000000000000000AA'));
+
 // Telemetry (page views) — only stored when a database is configured.
 define('TRACK_PAGE_VIEWS', env('TRACK_PAGE_VIEWS', '1') === '1');
 
