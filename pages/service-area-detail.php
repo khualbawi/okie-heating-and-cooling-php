@@ -4,7 +4,13 @@ $seo = [
     'title' => 'HVAC Services in ' . $area['name'] . ', OK',
     'description' => $area['seoText'] ?: $area['description'],
     'path' => '/service-areas/' . $area['slug'],
+    'jsonLd' => area_business_jsonld($area),
 ];
+$areaToken = strtoupper(str_replace([' ', '-'], '_', $area['name']));
+$areaReview = null;
+foreach (HOME_TESTIMONIALS as $t) {
+    if (str_starts_with($t['location'] ?? '', $area['name'] . ',')) { $areaReview = $t; break; }
+}
 require SITE_ROOT . '/includes/layout/header.php';
 ?>
 <section class="page-hero">
@@ -46,6 +52,24 @@ require SITE_ROOT . '/includes/layout/header.php';
         <div class="reveal" data-delay="<?= $i ?>"><?php component('service-card', ['service' => $svc]); ?></div>
       <?php endforeach; ?>
     </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container-md reveal">
+    <div class="grid-2 gap-6">
+      <div class="card">
+        <h3 class="h5 mb-3">Neighborhoods We Serve in <?= e($area['name']) ?></h3>
+        <p class="muted">{{<?= e($areaToken) ?>_NEIGHBORHOODS}}</p>
+      </div>
+      <div class="card">
+        <h3 class="h5 mb-3">Recent Job in <?= e($area['name']) ?></h3>
+        <p class="muted">{{<?= e($areaToken) ?>_RECENT_JOB}}</p>
+      </div>
+    </div>
+    <?php if ($areaReview): ?>
+      <div class="mt-6"><?php component('testimonial-card', ['t' => $areaReview]); ?></div>
+    <?php endif; ?>
   </div>
 </section>
 

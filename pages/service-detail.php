@@ -77,6 +77,8 @@ require SITE_ROOT . '/includes/layout/header.php';
   </div>
 </section>
 
+<?php component('brand-strip'); ?>
+
 <?php component('faq-section', ['faqs' => $service['faqs']]); ?>
 
 <?php if (!empty($service['seoText'])): ?>
