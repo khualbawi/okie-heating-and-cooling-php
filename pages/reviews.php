@@ -21,7 +21,6 @@ $stars5 = str_repeat(icon('star', 'icon-sm star-on'), 5);
   <div class="container-md stats-row">
     <div class="stat"><div class="stars center"><?= $stars5 ?></div><p class="stat-value"><?= number_format($avg, 1) ?></p><p class="stat-label">Average Rating</p></div>
     <div class="stat"><p class="stat-value"><?= $reviewCount ?></p><p class="stat-label">Featured Reviews</p></div>
-    <div class="stat"><p class="stat-value">98%</p><p class="stat-label">Would Recommend</p></div>
   </div>
 </section>
 
@@ -36,7 +35,10 @@ $stars5 = str_repeat(icon('star', 'icon-sm star-on'), 5);
       <div class="stars center mb-3"><?= $stars5 ?></div>
       <p class="h5 mb-1">5.0 · 18 reviews on Google</p>
       <p class="small muted mb-4">See all our reviews on Google Maps</p>
-      <a href="https://www.google.com/maps/search/Okie+Heating+and+Cooling+Jenks+OK" target="_blank" rel="noopener noreferrer" class="btn btn-primary">View on Google Maps</a>
+      <div class="btn-row center">
+        <a href="https://www.google.com/maps/search/Okie+Heating+and+Cooling+Jenks+OK" target="_blank" rel="noopener noreferrer" class="btn btn-primary">View on Google Maps</a>
+        <a href="{{GOOGLE_REVIEW_WRITE_URL}}" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Leave Us a Review</a>
+      </div>
     </div>
   </div>
 </section>

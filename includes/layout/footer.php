@@ -42,6 +42,7 @@
         <a href="/contact">Contact Us</a>
         <a href="/about">About Us</a>
         <a href="/reviews">Reviews</a>
+        <a href="{{GOOGLE_REVIEW_WRITE_URL}}" target="_blank" rel="noopener noreferrer">Leave Us a Review</a>
         <a href="/financing">Financing</a>
         <a href="/maintenance-plan">Maintenance Plan</a>
       </nav>
@@ -49,8 +50,8 @@
   </div>
   <div class="footer-bottom">
     <div class="container footer-bottom-inner">
-      <p>© <?= date('Y') ?> Okie Heating and Cooling. All rights reserved. Licensed &amp; Insured.</p>
-      <div class="footer-bottom-meta"><span>Tulsa, Oklahoma</span><span><?= e(LICENSE_NUMBER) ?></span></div>
+      <p>© <?= date('Y') ?> Okie Heating and Cooling. All rights reserved. Oklahoma Mechanical License <?= e(LICENSE_NUMBER) ?> · Licensed &amp; Insured.</p>
+      <div class="footer-bottom-meta"><span>Tulsa, Oklahoma</span></div>
     </div>
   </div>
 </footer>
