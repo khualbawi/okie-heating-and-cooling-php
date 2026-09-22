@@ -11,15 +11,6 @@
     onScroll();
   }
 
-  /* ---------- Hide nav logo while the big hero logo is on screen ---------- */
-  var heroHome = document.getElementById('hero-home');
-  if (header && heroHome && 'IntersectionObserver' in window) {
-    var heroIo = new IntersectionObserver(function (entries) {
-      header.classList.toggle('over-hero', entries[0].isIntersecting);
-    });
-    heroIo.observe(heroHome);
-  }
-
   /* ---------- Desktop dropdown (keyboard + hover) ---------- */
   document.querySelectorAll('.nav-item.has-dropdown').forEach(function (item) {
     var trigger = item.querySelector('.nav-link');

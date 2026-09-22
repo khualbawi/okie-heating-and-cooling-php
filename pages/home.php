@@ -16,7 +16,7 @@ $whyUs = [
 require SITE_ROOT . '/includes/layout/header.php';
 ?>
 
-<section class="hero hero-home" id="hero-home">
+<section class="hero hero-home">
   <div class="hero-glow-1"></div><div class="hero-glow-2"></div>
   <img src="/assets/img/okie-mark-watermark.webp" alt="" aria-hidden="true" class="hero-watermark" width="808" height="640" loading="lazy">
   <div class="container hero-inner">

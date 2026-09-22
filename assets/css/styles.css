@@ -232,11 +232,10 @@ iframe { border: 0; }
 .header-inner { display: flex; align-items: center; justify-content: space-between; height: 4rem; }
 @media (min-width: 1024px) { .header-inner { height: 5rem; } }
 .logo-link { display: flex; align-items: center; flex-shrink: 0; }
-.logo-img { height: 3rem; width: auto; transition: height .2s ease, opacity .2s ease; }
+.logo-img { height: 3rem; width: auto; transition: height .2s ease; }
 .logo-img-sm { height: 3rem; width: auto; }
 @media (min-width: 1024px) { .logo-img { height: 4rem; } }
 .site-header.is-scrolled .logo-img { height: 2.5rem; }
-.site-header.over-hero .logo-img { opacity: 0; }
 .desktop-nav { display: none; align-items: center; gap: .25rem; }
 @media (min-width: 1024px) { .desktop-nav { display: flex; } }
 .nav-item { position: relative; }
