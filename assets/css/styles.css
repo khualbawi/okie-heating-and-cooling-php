@@ -269,6 +269,17 @@ iframe { border: 0; }
 .mobile-menu-ctas { margin-top: 2rem; display: flex; flex-direction: column; gap: .75rem; }
 body.menu-open { overflow: hidden; }
 
+/* Dark sections sit on --primary navy; --accent is tuned dark for AA contrast
+   on light backgrounds, so on dark backgrounds it needs to go lighter instead
+   (both directions target ~5:1+ against their own background). */
+.hero, .page-hero, .cta-banner-dark, .member-box, .site-footer { --accent: hsl(28 92% 58%); }
+/* Solid accent-bg buttons keep white text, so they need the darker AA-safe
+   value regardless of section — reset it back down inside the scopes above. */
+.hero .btn-accent, .page-hero .btn-accent, .cta-banner-dark .btn-accent, .member-box .btn-accent, .site-footer .btn-accent,
+.hero .mobile-cta-book, .page-hero .mobile-cta-book, .cta-banner-dark .mobile-cta-book, .member-box .mobile-cta-book, .site-footer .mobile-cta-book {
+  --accent: hsl(28 92% 36%);
+}
+
 /* ---------- Hero ---------- */
 .hero { position: relative; overflow: hidden; background: var(--primary); color: var(--primary-fg); }
 .hero-glow-1, .hero-glow-2 { position: absolute; inset: 0; pointer-events: none; }
