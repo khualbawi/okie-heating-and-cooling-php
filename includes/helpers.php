@@ -96,12 +96,10 @@ function local_business_jsonld(): array
         'email' => EMAIL,
         'address' => [
             '@type' => 'PostalAddress',
-            'addressLocality' => 'Jenks',
+            'addressLocality' => 'Tulsa',
             'addressRegion' => 'OK',
-            'postalCode' => '74037',
             'addressCountry' => 'US',
         ],
-        'geo' => ['@type' => 'GeoCoordinates', 'latitude' => '36.0234', 'longitude' => '-95.9682'],
         'areaServed' => array_map(fn($n) => ['@type' => 'City', 'name' => $n], $cities),
         'knowsAbout' => array_column(SERVICES, 'title'),
         'openingHoursSpecification' => [[
@@ -113,7 +111,7 @@ function local_business_jsonld(): array
         'aggregateRating' => [
             '@type' => 'AggregateRating',
             'ratingValue' => '5',
-            'reviewCount' => '150',
+            'reviewCount' => '18',
             'bestRating' => '5',
             'worstRating' => '1',
         ],

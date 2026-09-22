@@ -36,6 +36,14 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
     $respond(false, 'Method not allowed', [], 405);
 }
 
+// --- CSRF: reject cross-origin posts (stateless, cache-safe — no session needed) ---
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+$sourceHost = parse_url($origin !== '' ? $origin : $referer, PHP_URL_HOST);
+if ($sourceHost !== null && $sourceHost !== parse_url(SITE_URL, PHP_URL_HOST)) {
+    $respond(false, 'Request rejected.', [], 403);
+}
+
 // Accept JSON bodies too
 if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
     $json = json_decode(file_get_contents('php://input') ?: '', true);

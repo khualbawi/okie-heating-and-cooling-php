@@ -59,7 +59,7 @@ define('OFFICE_PHONE_HREF', PHONE_HREF);
 define('EMERGENCY_PHONE_NUMBER', PHONE_NUMBER);
 define('EMERGENCY_PHONE_HREF', PHONE_HREF);
 define('EMAIL', 'info@okieheatingandcooling.com');
-define('ADDRESS', 'Jenks, OK 74037');
+define('ADDRESS', 'Serving Tulsa, OK & surrounding areas');
 define('LICENSE_NUMBER', 'OK LIC 00195102');
 
 const HOURS = [

@@ -52,7 +52,7 @@
   --secondary: hsl(215 20% 93%);
   --muted: hsl(215 20% 93%);
   --muted-fg: hsl(218 15% 42%);
-  --accent: hsl(28 92% 54%);
+  --accent: hsl(28 92% 36%);
   --accent-fg: #ffffff;
   --destructive: hsl(0 84.2% 60.2%);
   --border: hsl(215 18% 88%);
@@ -62,10 +62,10 @@
   --primary-5: hsl(218 72% 21% / .05);
   --primary-10: hsl(218 72% 21% / .10);
   --primary-20: hsl(218 72% 21% / .20);
-  --accent-10: hsl(28 92% 54% / .10);
-  --accent-15: hsl(28 92% 54% / .15);
-  --accent-20: hsl(28 92% 54% / .20);
-  --accent-25: hsl(28 92% 54% / .25);
+  --accent-10: hsl(28 92% 36% / .10);
+  --accent-15: hsl(28 92% 36% / .15);
+  --accent-20: hsl(28 92% 36% / .20);
+  --accent-25: hsl(28 92% 36% / .25);
 
   --red-600: #dc2626; --red-700: #b91c1c; --red-50: #fef2f2; --red-200: #fecaca; --red-800: #991b1b; --red-900: #7f1d1d;
   --green-600: #16a34a; --green-700: #15803d; --green-50: #f0fdf4; --green-100: #dcfce7; --green-200: #bbf7d0; --green-900: #14532d;
@@ -194,7 +194,7 @@ iframe { border: 0; }
 .btn-block { width: 100%; }
 .btn-icon { width: 2.5rem; padding: 0; }
 .btn-accent { background: var(--accent); color: var(--accent-fg); box-shadow: 0 10px 15px -3px var(--accent-20); }
-.btn-accent:hover { background: hsl(28 92% 54% / .9); }
+.btn-accent:hover { background: hsl(28 92% 36% / .9); }
 .btn-primary { background: var(--primary); color: var(--primary-fg); }
 .btn-primary:hover { background: hsl(218 72% 21% / .9); }
 .btn-secondary { background: var(--secondary); color: var(--fg); }
@@ -363,7 +363,7 @@ body.menu-open { overflow: hidden; }
 .cta-banner { padding: 4rem 0; }
 @media (min-width: 1024px) { .cta-banner { padding: 6rem 0; } }
 .cta-banner-dark { background: var(--primary); color: var(--primary-fg); }
-.cta-banner-light { background: hsl(28 92% 54% / .05); }
+.cta-banner-light { background: hsl(28 92% 36% / .05); }
 .cta-banner .h2 { margin-bottom: 1rem; }
 .cta-sub { font-size: 1.125rem; margin-bottom: 2rem; max-width: 42rem; margin-left: auto; margin-right: auto; }
 .cta-banner-dark .cta-sub { color: rgb(255 255 255 / .7); }
