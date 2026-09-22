@@ -43,8 +43,10 @@ require SITE_ROOT . '/includes/layout/header.php';
         <?php endforeach; ?>
       </div>
       <div class="text-center mt-6">
-        <p class="small muted mb-4">Financing application placeholder — integration coming soon</p>
-        <a href="/contact" class="btn btn-accent btn-lg">Contact Us to Apply <?= icon('arrow-right', 'icon-sm') ?></a>
+        <p class="small muted mb-1">Financing through {{FINANCING_PARTNER}}</p>
+        <p class="h4 mb-4">As low as ${{FINANCING_SAMPLE_PAYMENT}}/mo<sup class="small muted">*</sup></p>
+        <a href="{{FINANCING_APPLY_URL}}" target="_blank" rel="noopener noreferrer" class="btn btn-accent btn-lg">Apply Now <?= icon('arrow-right', 'icon-sm') ?></a>
+        <p class="small muted-60 mt-3">*Sample payment for qualifying credit. Terms vary by approval.</p>
       </div>
     </div>
   </div>
@@ -54,10 +56,23 @@ require SITE_ROOT . '/includes/layout/header.php';
   <div class="container-md text-center reveal">
     <h2 class="h2">Current Specials</h2>
     <p class="lead muted mb-8">Check back regularly for seasonal deals and limited-time promotions.</p>
-    <div class="card card-xl">
-      <p class="muted">Seasonal promotions and special offers coming soon.</p>
-      <p class="small muted-60 mt-2">Contact us for current pricing and deals.</p>
-    </div>
+    <?php $specials = active_financing_specials(); ?>
+    <?php if ($specials): ?>
+      <div class="grid-3 gap-6">
+        <?php foreach ($specials as $i => $s): ?>
+          <div class="feature-card text-center reveal" data-delay="<?= $i ?>">
+            <h3 class="feature-title"><?= e($s['title']) ?></h3>
+            <p class="h3 accent mb-2"><?= e($s['price']) ?></p>
+            <p class="small muted">Expires <?= e(date('M j, Y', strtotime($s['expires']))) ?></p>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    <?php else: ?>
+      <div class="card card-xl">
+        <p class="muted">Seasonal promotions and special offers coming soon.</p>
+        <p class="small muted-60 mt-2">Contact us for current pricing and deals.</p>
+      </div>
+    <?php endif; ?>
   </div>
 </section>
 
