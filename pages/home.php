@@ -16,20 +16,18 @@ $whyUs = [
 require SITE_ROOT . '/includes/layout/header.php';
 ?>
 
-<section class="hero hero-home">
+<section class="hero hero-home" id="hero-home">
   <div class="hero-glow-1"></div><div class="hero-glow-2"></div>
+  <img src="/assets/img/okie-mark-watermark.webp" alt="" aria-hidden="true" class="hero-watermark" width="808" height="640" loading="lazy">
   <div class="container hero-inner">
-    <div class="hero-text">
-      <div class="pill reveal"><?= icon('map-pin', 'icon-xs') ?> Serving Tulsa &amp; Surrounding Areas</div>
-      <h1 class="hero-title reveal" data-delay="1">Reliable Heating &amp; Cooling<span class="accent-text">for Tulsa, Oklahoma</span></h1>
-      <p class="hero-sub reveal" data-delay="2">Fast HVAC repairs, expert installations, and preventive maintenance you can count on. Keeping Tulsa homes and businesses comfortable year-round.</p>
-      <div class="btn-row reveal" data-delay="3">
-        <a href="/book" class="btn btn-accent btn-lg">Book Service <?= icon('arrow-right', 'icon-sm') ?></a>
-        <a href="<?= PHONE_HREF ?>" class="btn btn-secondary btn-lg"><?= icon('phone', 'icon-sm') ?> Call <?= e(PHONE_NUMBER) ?></a>
-      </div>
-      <div class="hero-badges reveal" data-delay="4"><?php component('trust-badges', ['variant' => 'compact', 'exclude' => ['24/7 Emergency']]); ?></div>
+    <img src="/assets/img/okie-logo-hero.webp" srcset="/assets/img/okie-logo-hero-640.webp 640w, /assets/img/okie-logo-hero.webp 1024w" sizes="340px" alt="Okie Heating and Cooling" width="1024" height="409" class="hero-logo-mark hero-area-logo reveal" fetchpriority="high" decoding="async">
+    <h1 class="hero-title hero-area-h1 reveal" data-delay="1">Reliable Heating &amp; Cooling<span class="accent-text">for Tulsa, Oklahoma</span></h1>
+    <p class="hero-sub hero-area-sub reveal" data-delay="2">Fast HVAC repairs, expert installations, and preventive maintenance you can count on. Keeping Tulsa homes and businesses comfortable year-round.</p>
+    <div class="btn-row hero-area-btns reveal" data-delay="3">
+      <a href="/book" class="btn btn-accent btn-lg">Book Service <?= icon('arrow-right', 'icon-sm') ?></a>
+      <a href="<?= PHONE_HREF ?>" class="btn btn-secondary btn-lg"><?= icon('phone', 'icon-sm') ?> Call <?= e(PHONE_NUMBER) ?></a>
     </div>
-    <div class="hero-quote reveal" data-delay="2">
+    <div class="hero-quote hero-area-form reveal" data-delay="2">
       <div class="hero-quote-card">
         <h2 class="h4">Get a Fast Quote</h2>
         <?php component('service-request-form', [
@@ -39,6 +37,7 @@ require SITE_ROOT . '/includes/layout/header.php';
         ]); ?>
       </div>
     </div>
+    <div class="hero-badges hero-area-trust reveal" data-delay="4"><?php component('trust-badges', ['variant' => 'compact', 'exclude' => ['24/7 Emergency', 'Satisfaction Guaranteed']]); ?></div>
   </div>
 </section>
 

@@ -232,9 +232,11 @@ iframe { border: 0; }
 .header-inner { display: flex; align-items: center; justify-content: space-between; height: 4rem; }
 @media (min-width: 1024px) { .header-inner { height: 5rem; } }
 .logo-link { display: flex; align-items: center; flex-shrink: 0; }
-.logo-img { height: 3rem; width: auto; }
+.logo-img { height: 3rem; width: auto; transition: height .2s ease, opacity .2s ease; }
 .logo-img-sm { height: 3rem; width: auto; }
 @media (min-width: 1024px) { .logo-img { height: 4rem; } }
+.site-header.is-scrolled .logo-img { height: 2.5rem; }
+.site-header.over-hero .logo-img { opacity: 0; }
 .desktop-nav { display: none; align-items: center; gap: .25rem; }
 @media (min-width: 1024px) { .desktop-nav { display: flex; } }
 .nav-item { position: relative; }
@@ -285,24 +287,42 @@ body.menu-open { overflow: hidden; }
 .hero-glow-1, .hero-glow-2 { position: absolute; inset: 0; pointer-events: none; }
 .hero-glow-1 { background: radial-gradient(ellipse at top right, hsl(215 80% 30%) 0%, transparent 50%); }
 .hero-glow-2 { background: radial-gradient(ellipse at bottom left, hsl(32 95% 52% / .08) 0%, transparent 50%); }
-.hero-inner { position: relative; padding-top: 5rem; padding-bottom: 5rem; display: flex; flex-direction: column; align-items: center; gap: 3rem; }
-@media (min-width: 1024px) { .hero-inner { padding-top: 8rem; padding-bottom: 8rem; flex-direction: row; gap: 4rem; } }
-.hero-text { flex: 1; }
-.hero-title { font-size: 2.25rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 1.5rem; }
+.hero-watermark { display: none; position: absolute; right: -8rem; bottom: -6rem; width: 44rem; max-width: none; opacity: .06; pointer-events: none; }
+@media (min-width: 768px) { .hero-watermark { display: block; } }
+.hero-inner {
+  position: relative; padding-top: 3rem; padding-bottom: 3rem;
+  display: grid; justify-items: center; text-align: center; gap: 1.75rem;
+  grid-template-areas: "logo" "h1" "sub" "btns" "form" "trust";
+}
+@media (min-width: 768px) {
+  .hero-inner {
+    padding-top: 6rem; padding-bottom: 6rem; justify-items: start; text-align: left;
+    grid-template-columns: 55% 45%; column-gap: 3rem; row-gap: 1.5rem;
+    grid-template-areas:
+      "logo  form"
+      "h1    form"
+      "sub   form"
+      "btns  form"
+      "trust form";
+  }
+}
+.hero-area-logo { grid-area: logo; }
+.hero-area-h1 { grid-area: h1; }
+.hero-area-sub { grid-area: sub; }
+.hero-area-btns { grid-area: btns; }
+.hero-area-form { grid-area: form; align-self: start; }
+.hero-area-trust { grid-area: trust; }
+.hero-logo-mark { width: 15rem; height: auto; }
+@media (min-width: 768px) { .hero-logo-mark { width: 21.25rem; } }
+.hero-title { font-size: 2.25rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.025em; margin: 0; }
 @media (min-width: 640px) { .hero-title { font-size: 3rem; } }
 @media (min-width: 1024px) { .hero-title { font-size: 3.75rem; } }
-.hero-sub { font-size: 1.125rem; color: rgb(255 255 255 / .7); max-width: 42rem; margin-bottom: 2rem; line-height: 1.625; }
+.hero-sub { font-size: 1.125rem; color: rgb(255 255 255 / .7); max-width: 42rem; margin: 0; line-height: 1.625; }
 .hero-sub.center { margin-left: auto; margin-right: auto; margin-bottom: 0; }
 @media (min-width: 1024px) { .hero-sub { font-size: 1.25rem; } }
-.hero-badges { margin-top: 2.5rem; }
-.hero-logo { flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-.hero-logo img { height: 10rem; width: auto; }
-@media (min-width: 640px) { .hero-logo img { height: 12rem; } }
-@media (min-width: 1024px) { .hero-logo img { height: 14rem; } }
-@media (min-width: 1280px) { .hero-logo img { height: 16rem; } }
+.hero-badges { margin-top: .5rem; }
 
-.hero-quote { flex-shrink: 0; width: 100%; }
-@media (min-width: 1024px) { .hero-quote { width: 26rem; } }
+.hero-quote { width: 100%; }
 .hero-quote-card { background: var(--card); color: var(--fg); border-radius: 1rem; padding: 1.5rem; box-shadow: 0 20px 40px -12px rgb(0 0 0 / .35); }
 @media (min-width: 640px) { .hero-quote-card { padding: 2rem; } }
 .hero-quote-card h2 { margin-bottom: 1.25rem; }

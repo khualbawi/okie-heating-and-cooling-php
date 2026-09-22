@@ -48,6 +48,11 @@ function page_cache_build_id(): string
     ] as $f) {
         $stamp = max($stamp, (int) @filemtime(SITE_ROOT . $f));
     }
+    // Page templates and components shape output too — a page-only edit must bust the
+    // cache just like a shared-include edit does.
+    foreach ([...glob(SITE_ROOT . '/pages/*.php') ?: [], ...glob(SITE_ROOT . '/includes/components/*.php') ?: []] as $f) {
+        $stamp = max($stamp, (int) @filemtime($f));
+    }
     return $id = substr(sha1((string) $stamp . '|' . SITE_URL), 0, 12);
 }
 
