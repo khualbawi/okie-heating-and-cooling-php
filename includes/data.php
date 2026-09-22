@@ -332,6 +332,30 @@ const HOME_FAQS = [
     ['q' => 'Do you offer financing?', 'a' => 'Yes, we offer flexible financing options to help make new system installations and major repairs affordable.'],
 ];
 
+// ---------------------------------------------------------------------------
+// Brands serviced (matches the list already published in HOME_FAQS/services)
+// ---------------------------------------------------------------------------
+const BRANDS_SERVICED = ['Carrier', 'Trane', 'Lennox', 'Rheem', 'Goodman', 'Daikin', 'York'];
+
+// ---------------------------------------------------------------------------
+// Financing specials — placeholder entries until real offers are supplied.
+// Expired entries are filtered out automatically by active_financing_specials().
+// ---------------------------------------------------------------------------
+const FINANCING_SPECIALS = [
+    ['title' => '{{SPECIAL_1_TITLE}}', 'price' => '{{SPECIAL_1_PRICE}}', 'expires' => '{{SPECIAL_1_EXPIRY}}'],
+    ['title' => '{{SPECIAL_2_TITLE}}', 'price' => '{{SPECIAL_2_PRICE}}', 'expires' => '{{SPECIAL_2_EXPIRY}}'],
+];
+
+/** Specials with a parseable, non-past expiry date. Unparseable placeholder dates are skipped. */
+function active_financing_specials(): array
+{
+    $today = date('Y-m-d');
+    return array_values(array_filter(FINANCING_SPECIALS, function ($s) use ($today) {
+        $ts = strtotime($s['expires']);
+        return $ts !== false && date('Y-m-d', $ts) >= $today;
+    }));
+}
+
 function get_service_by_slug(string $slug): ?array
 {
     foreach (SERVICES as $s) {

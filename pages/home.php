@@ -7,10 +7,10 @@ $seo = [
 ];
 $whyUs = [
     ['clock', 'Fast Response', "Same-day service and 24/7 emergency availability. We know comfort can't wait."],
-    ['shield', 'Licensed & Insured', 'Fully licensed, insured, and background-checked technicians you can trust in your home.'],
+    ['shield', 'Licensed & Insured', 'Fully licensed (' . LICENSE_NUMBER . '), insured, and background-checked technicians you can trust in your home.'],
     ['zap', 'Upfront Pricing', 'No surprises. We provide clear, honest pricing before any work begins.'],
     ['users', 'Locally Owned', "We're your Tulsa neighbors. Invested in our community and your comfort."],
-    ['star', '5-Star Service', 'Hundreds of satisfied customers across the Tulsa metro trust us for their HVAC needs.'],
+    ['star', '5-Star Service', 'Rated 5.0★ on Google by Tulsa homeowners.', '{{GOOGLE_REVIEWS_URL}}'],
     ['check-circle', 'Guaranteed Work', 'We stand behind every repair and installation with a satisfaction guarantee.'],
 ];
 require SITE_ROOT . '/includes/layout/header.php';
@@ -27,15 +27,41 @@ require SITE_ROOT . '/includes/layout/header.php';
         <a href="/book" class="btn btn-accent btn-lg">Book Service <?= icon('arrow-right', 'icon-sm') ?></a>
         <a href="<?= PHONE_HREF ?>" class="btn btn-secondary btn-lg"><?= icon('phone', 'icon-sm') ?> Call <?= e(PHONE_NUMBER) ?></a>
       </div>
-      <div class="hero-badges reveal" data-delay="4"><?php component('trust-badges', ['variant' => 'compact']); ?></div>
+      <div class="hero-badges reveal" data-delay="4"><?php component('trust-badges', ['variant' => 'compact', 'exclude' => ['24/7 Emergency']]); ?></div>
     </div>
-    <div class="hero-logo reveal" data-delay="2">
-      <img src="/assets/img/okie-logo-hero.webp" srcset="/assets/img/okie-logo-hero-640.webp 640w, /assets/img/okie-logo-hero.webp 1024w" sizes="(max-width: 640px) 90vw, 1024px" alt="Okie Heating and Cooling" width="1024" height="409" fetchpriority="high" decoding="async">
+    <div class="hero-quote reveal" data-delay="2">
+      <div class="hero-quote-card">
+        <h2 class="h4">Get a Fast Quote</h2>
+        <?php component('service-request-form', [
+            'source' => 'homepage_hero', 'compact' => true,
+            'serviceLabel' => 'What do you need? *', 'servicePlaceholder' => 'Select an issue',
+            'messageLabel' => 'Details (optional)', 'messagePlaceholder' => 'Tell us what\'s going on.',
+        ]); ?>
+      </div>
     </div>
   </div>
 </section>
 
 <section class="trust-bar"><div class="container"><?php component('trust-badges'); ?></div></section>
+
+<?php
+$homeServiceSlugs = ['ac-repair', 'ac-installation', 'ac-maintenance', 'heating-repair', 'heating-installation', 'heating-maintenance', 'furnace-repair', 'furnace-installation', 'emergency-hvac'];
+$homeServices = array_filter(SERVICES, fn($s) => in_array($s['slug'], $homeServiceSlugs, true));
+?>
+<section class="section bg-muted-50">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">What We Do</p>
+      <h2 class="h2">Our Services</h2>
+      <p class="lead muted">Full-service heating and cooling care for Tulsa homes and businesses.</p>
+    </div>
+    <div class="grid-3 gap-6">
+      <?php foreach (array_values($homeServices) as $i => $svc): ?>
+        <div class="reveal" data-delay="<?= $i % 6 ?>"><?php component('service-card', ['service' => $svc]); ?></div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
 
 <section class="section">
   <div class="container">
@@ -45,11 +71,14 @@ require SITE_ROOT . '/includes/layout/header.php';
       <p class="lead muted">We're not just another HVAC company. We're your neighbors, committed to honest work and exceptional service.</p>
     </div>
     <div class="grid-3 gap-6">
-      <?php foreach ($whyUs as $i => [$ic, $title, $desc]): ?>
+      <?php foreach ($whyUs as $i => $w): [$ic, $title, $desc] = $w; $link = $w[3] ?? null; ?>
         <div class="feature-card reveal" data-delay="<?= $i ?>">
           <div class="feature-icon"><?= icon($ic, 'icon-sm') ?></div>
           <h3 class="feature-title"><?= e($title) ?></h3>
-          <p class="feature-desc"><?= e($desc) ?></p>
+          <p class="feature-desc">
+            <?= e($desc) ?>
+            <?php if ($link): ?> <a href="<?= e($link) ?>" target="_blank" rel="noopener noreferrer" class="link-accent">See reviews</a><?php endif; ?>
+          </p>
         </div>
       <?php endforeach; ?>
     </div>
@@ -99,6 +128,8 @@ require SITE_ROOT . '/includes/layout/header.php';
     </div>
   </div>
 </section>
+
+<?php component('brand-strip'); ?>
 
 <?php component('faq-section', ['faqs' => HOME_FAQS, 'title' => 'Common Questions', 'subtitle' => 'Quick answers about our HVAC services in Tulsa']); ?>
 

@@ -13,7 +13,6 @@ $seo = array_merge([
 ], $seo ?? []);
 
 $cssVer  = @filemtime(SITE_ROOT . '/assets/css/styles.css') ?: '1';
-$isHome  = current_path() === '/';
 
 $pageTitle = build_title($seo['title']);
 $canonical = abs_url($seo['path']);
@@ -78,9 +77,6 @@ $navLinks = [
   <link rel="stylesheet" href="/assets/css/styles.css?v=<?= $cssVer ?>">
   <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter-latin-var.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/jakarta-latin-var.woff2" crossorigin>
-<?php if ($isHome): ?>
-  <link rel="preload" as="image" href="/assets/img/okie-logo-hero-640.webp" imagesrcset="/assets/img/okie-logo-hero-640.webp 640w, /assets/img/okie-logo-hero.webp 1024w" imagesizes="(max-width: 640px) 90vw, 1024px" fetchpriority="high">
-<?php endif; ?>
 
   <script type="application/ld+json"><?= json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
 <?php if (!empty($seo['extraJsonLd'])): ?>

@@ -117,7 +117,21 @@ function local_business_jsonld(): array
         ],
         'priceRange' => '$$',
         'paymentAccepted' => 'Cash, Credit Card, Financing',
+        'hasCredential' => [
+            '@type' => 'EducationalOccupationalCredential',
+            'credentialCategory' => 'license',
+            'name' => 'Oklahoma Mechanical License',
+            'identifier' => LICENSE_NUMBER,
+        ],
     ];
+}
+
+/** Local business JSON-LD scoped to a single service area (service-area-detail pages). */
+function area_business_jsonld(array $area): array
+{
+    $jsonLd = local_business_jsonld();
+    $jsonLd['areaServed'] = [['@type' => 'City', 'name' => $area['name'], 'addressRegion' => 'OK']];
+    return $jsonLd;
 }
 
 function service_jsonld(string $serviceName, string $url, string $description): array
