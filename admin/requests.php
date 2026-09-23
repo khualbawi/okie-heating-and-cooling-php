@@ -60,13 +60,20 @@ if ($pdo = db()) {
 }
 
 // --- CSV export --------------------------------------------------------------
+// Every field below can contain attacker-chosen text (public, unauthenticated
+// form submissions) - a leading =/+/-/@ is a formula in Excel/Sheets, so prefix
+// a tab to neutralize it before it can execute in whoever opens this file.
+$csvSafe = function ($v) {
+    $v = (string) $v;
+    return $v !== '' && str_contains("=+-@\t\r", $v[0]) ? "\t" . $v : $v;
+};
 if (isset($_GET['csv'])) {
     header('Content-Type: text/csv; charset=UTF-8');
     header('Content-Disposition: attachment; filename="service-requests-' . date('Y-m-d') . '.csv"');
     $out = fopen('php://output', 'w');
     $cols = ['id','created_at','status','name','phone','email','service_type','urgency','address','city','preferred_date','preferred_time','customer_type','form_source','utm_source','utm_medium','utm_campaign','consent','issue_description'];
     fputcsv($out, $cols);
-    foreach ($rows as $r) fputcsv($out, array_map(fn($c) => $r[$c] ?? '', $cols));
+    foreach ($rows as $r) fputcsv($out, array_map(fn($c) => $csvSafe($r[$c] ?? ''), $cols));
     fclose($out);
     exit;
 }
