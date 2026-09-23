@@ -12,6 +12,7 @@ $urls = [
     ['/', 'weekly', '1.0'], ['/services', 'weekly', '0.9'], ['/service-areas', 'monthly', '0.8'],
     ['/book', 'monthly', '0.9'], ['/contact', 'monthly', '0.8'], ['/about', 'monthly', '0.7'],
     ['/reviews', 'weekly', '0.7'], ['/financing', 'monthly', '0.7'], ['/maintenance-plan', 'monthly', '0.7'],
+    ['/privacy', 'yearly', '0.3'], ['/terms', 'yearly', '0.3'], ['/accessibility', 'yearly', '0.3'],
 ];
 $prio = ['ac-repair' => '0.9', 'heating-repair' => '0.9', 'furnace-repair' => '0.9', 'emergency-hvac' => '0.95', 'ac-installation' => '0.85', 'heating-installation' => '0.85', 'furnace-installation' => '0.85', 'ac-maintenance' => '0.8', 'heating-maintenance' => '0.8', 'indoor-air-quality' => '0.75'];
 foreach (SERVICES as $s) $urls[] = ['/services/' . $s['slug'], 'monthly', $prio[$s['slug']] ?? '0.7'];

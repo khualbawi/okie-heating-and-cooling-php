@@ -77,6 +77,11 @@
   <div class="footer-bottom">
     <div class="container footer-bottom-inner">
       <p>© <?= date('Y') ?> Okie Heating and Cooling. All rights reserved. Oklahoma Mechanical License <?= e(LICENSE_NUMBER) ?> · Licensed &amp; Insured.</p>
+      <nav class="footer-legal-links" aria-label="Legal">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Use</a>
+        <a href="/accessibility">Accessibility</a>
+      </nav>
       <div class="footer-bottom-meta tablet-up"><span>Tulsa, Oklahoma</span></div>
     </div>
   </div>

@@ -98,6 +98,7 @@ require SITE_ROOT . '/includes/layout/header.php';
             <input type="email" name="email" placeholder="Email (optional)" class="input-plain" aria-label="Email">
             <?php if (TURNSTILE_CONFIGURED): ?>
               <div class="cf-turnstile" data-sitekey="<?= e(TURNSTILE_SITE_KEY) ?>" data-size="flexible" data-theme="light"></div>
+              <p class="form-privacy-note">By submitting you agree to our <a href="/privacy">Privacy Policy</a>.</p>
               <button type="submit" class="btn btn-accent btn-lg btn-block" data-submit-btn>
                 <span class="btn-spinner" hidden><?= icon('loader', 'icon-sm spin') ?></span>
                 <span class="btn-arrow"><?= icon('send', 'icon-sm') ?></span>

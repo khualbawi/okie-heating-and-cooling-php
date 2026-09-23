@@ -51,6 +51,9 @@ $static = [
     '/reviews'          => 'reviews',
     '/financing'        => 'financing',
     '/maintenance-plan' => 'maintenance-plan',
+    '/privacy'          => 'privacy',
+    '/terms'            => 'terms',
+    '/accessibility'    => 'accessibility',
 ];
 
 if (isset($static[$path])) {
