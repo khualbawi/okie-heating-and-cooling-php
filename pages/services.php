@@ -1,6 +1,6 @@
 <?php
 $seo = [
-    'title' => 'HVAC Services in Tulsa, OK',
+    'title' => 'All HVAC Services We Offer',
     'description' => 'Explore AC repair, heating repair, installation, maintenance, indoor air quality, ductwork, commercial HVAC, and emergency service across the Tulsa metro.',
     'path' => '/services',
 ];
@@ -9,7 +9,7 @@ require SITE_ROOT . '/includes/layout/header.php';
 <section class="page-hero">
   <div class="container reveal">
     <p class="eyebrow">Our Services</p>
-    <h1 class="h1">HVAC Services in Tulsa, OK</h1>
+    <h1 class="h1">Every HVAC Service We Offer</h1>
     <p class="page-hero-sub">Complete heating, cooling, and air quality solutions for Tulsa homes and businesses. Expert service, honest pricing.</p>
   </div>
 </section>

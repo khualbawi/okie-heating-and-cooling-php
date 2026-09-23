@@ -31,7 +31,7 @@ require SITE_ROOT . '/includes/layout/header.php';
 <section class="section">
   <div class="container grid-2 gap-12">
     <div class="reveal">
-      <h2 class="h2 mb-6"><?= e($service['title']) ?> in Tulsa, OK</h2>
+      <h2 class="h2 mb-6">What Our <?= e($service['shortTitle']) ?> Service Covers</h2>
       <p class="muted mb-8 leading-relaxed"><?= e($service['description']) ?></p>
       <h3 class="h4 mb-4">Benefits</h3>
       <ul class="check-list">
@@ -71,8 +71,8 @@ require SITE_ROOT . '/includes/layout/header.php';
 
 <section class="section">
   <div class="container-sm text-center reveal">
-    <h2 class="h2">Why Choose Okie Heating and Cooling?</h2>
-    <p class="lead muted mb-8">We're locally owned, fully licensed, and committed to honest pricing and expert workmanship. When you choose Okie, you choose a team that treats your home like their own.</p>
+    <h2 class="h2">Why Choose Okie for <?= e($service['shortTitle']) ?>?</h2>
+    <p class="lead muted mb-8"><?= e($service['whyUs']) ?></p>
     <a href="/book?service=<?= e($service['formValue']) ?>" class="btn btn-accent btn-lg">Book <?= e($service['shortTitle']) ?> Now <?= icon('arrow-right', 'icon-sm') ?></a>
   </div>
 </section>
@@ -85,5 +85,9 @@ require SITE_ROOT . '/includes/layout/header.php';
   <section class="seo-block"><div class="container-sm"><p class="small muted leading-relaxed"><?= e($service['seoText']) ?></p></div></section>
 <?php endif; ?>
 
-<?php component('cta-banner', ['variant' => 'dark']); ?>
+<?php component('cta-banner', [
+    'variant' => 'dark',
+    'headline' => 'Need ' . $service['shortTitle'] . ' Today?',
+    'subheadline' => 'Book online or call us for fast, reliable ' . mb_strtolower($service['shortTitle']) . ' service in the Tulsa metro.',
+]); ?>
 <?php require SITE_ROOT . '/includes/layout/footer.php'; ?>

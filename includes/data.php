@@ -25,6 +25,7 @@ const SERVICES = [
             ['q' => 'Is it better to repair or replace my AC?', 'a' => "It depends on the age of the unit, repair cost, and efficiency. If your AC is over 12-15 years old and the repair is costly, replacement may be the better long-term investment. We'll give you honest advice."],
         ],
         'seoText' => 'Looking for trusted AC repair in Tulsa, Oklahoma? Okie Heating and Cooling provides fast, affordable air conditioning repair services across the Tulsa metro area. Our experienced HVAC technicians are available for same-day AC repairs in Tulsa, Broken Arrow, Owasso, Bixby, Jenks, and surrounding communities. Whether your central air stopped working, your AC is blowing warm air, or you hear strange noises from your unit, we diagnose and fix the problem quickly with upfront pricing and no hidden fees.',
+        'whyUs' => 'Same-visit diagnosis and repair on most AC calls — we carry common parts on the truck so a single trip usually gets you cooling again.',
     ],
     [
         'slug' => 'ac-installation', 'title' => 'AC Installation', 'shortTitle' => 'AC Install', 'category' => 'cooling', 'icon' => 'fan', 'formValue' => 'ac_installation',
@@ -43,9 +44,10 @@ const SERVICES = [
             ['q' => 'How much does a new AC system cost in Tulsa?', 'a' => "AC installation costs vary based on system size, efficiency rating, and your home's needs. We provide free estimates and offer financing to make it affordable."],
             ['q' => 'How long does AC installation take?', 'a' => 'Most residential AC installations are completed in one day. Complex installations or ductwork modifications may take slightly longer.'],
             ['q' => 'What size AC do I need?', 'a' => "System sizing depends on your home's square footage, insulation, windows, and other factors. We perform a Manual J load calculation to determine the perfect size."],
-            ['q' => 'Do you offer financing?', 'a' => 'Yes! We offer flexible financing options to help you invest in comfort without breaking the bank.'],
+            ['q' => 'Can I finance a new AC installation?', 'a' => 'Yes! We offer flexible financing options to help you invest in comfort without breaking the bank.'],
         ],
         'seoText' => 'Need a new air conditioning system installed in Tulsa? Okie Heating and Cooling offers professional AC installation services throughout the Tulsa metro area. We install all major brands and help you choose the right high-efficiency system for your home and budget.',
+        'whyUs' => 'We size every system to your home\'s actual square footage and duct layout instead of swapping in a same-size replacement by default.',
     ],
     [
         'slug' => 'ac-maintenance', 'title' => 'AC Maintenance', 'shortTitle' => 'AC Tune-Up', 'category' => 'cooling', 'icon' => 'settings', 'formValue' => 'ac_maintenance',
@@ -65,6 +67,7 @@ const SERVICES = [
             ['q' => "What's included in an AC tune-up?", 'a' => 'Our tune-up includes checking refrigerant, cleaning coils, inspecting electrical connections, testing controls, replacing filters, and a full system performance check.'],
         ],
         'seoText' => 'Schedule professional AC maintenance in Tulsa with Okie Heating and Cooling. Our comprehensive tune-up service keeps your air conditioner running efficiently, prevents unexpected breakdowns, and saves you money on energy bills.',
+        'whyUs' => 'A documented seasonal tune-up checklist, not a five-minute filter swap — we test refrigerant charge, electrical draw, and airflow every visit.',
     ],
     [
         'slug' => 'heating-repair', 'title' => 'Heating Repair', 'shortTitle' => 'Heat Repair', 'category' => 'heating', 'icon' => 'flame', 'formValue' => 'heating_repair',
@@ -84,6 +87,7 @@ const SERVICES = [
             ['q' => 'Is it safe to keep using my heater if it smells strange?', 'a' => 'If you smell gas or a burning smell, turn off your heater immediately and call us. Strange smells can indicate safety hazards that need professional attention.'],
         ],
         'seoText' => 'Fast, reliable heating repair in Tulsa, OK. Okie Heating and Cooling fixes furnaces, heat pumps, and all heating systems. Same-day service available for Tulsa, Broken Arrow, Owasso, and surrounding areas.',
+        'whyUs' => 'Technicians trained on both gas furnaces and heat pumps, so we diagnose the right system the first time instead of guessing.',
     ],
     [
         'slug' => 'heating-installation', 'title' => 'Heating Installation', 'shortTitle' => 'Heat Install', 'category' => 'heating', 'icon' => 'thermometer-sun', 'formValue' => 'heating_installation',
@@ -103,6 +107,7 @@ const SERVICES = [
             ['q' => 'How long does a heating installation take?', 'a' => "Most installations are completed in one day. We'll give you a timeline during your consultation."],
         ],
         'seoText' => 'Professional heating installation in Tulsa, OK. Okie Heating and Cooling installs furnaces, heat pumps, and heating systems throughout the Tulsa metro area with expert precision and financing options.',
+        'whyUs' => 'We run a load calculation before recommending equipment, so you\'re not oversized (and overpaying) or undersized (and cold).',
     ],
     [
         'slug' => 'heating-maintenance', 'title' => 'Heating Maintenance', 'shortTitle' => 'Heat Tune-Up', 'category' => 'heating', 'icon' => 'wrench', 'formValue' => 'heating_maintenance',
@@ -121,6 +126,7 @@ const SERVICES = [
             ['q' => 'When should I schedule heating maintenance?', 'a' => 'Ideally in early fall, before the heating season starts. This ensures your system is ready when you need it most.'],
         ],
         'seoText' => 'Keep your heater running safely and efficiently with professional heating maintenance from Okie Heating and Cooling in Tulsa, OK. Schedule your annual tune-up today.',
+        'whyUs' => 'Our heating tune-up includes a carbon monoxide and heat-exchanger safety check, not just a filter change.',
     ],
     [
         'slug' => 'furnace-repair', 'title' => 'Furnace Repair', 'shortTitle' => 'Furnace Repair', 'category' => 'heating', 'icon' => 'flame', 'formValue' => 'furnace_repair',
@@ -139,6 +145,7 @@ const SERVICES = [
             ['q' => 'How do I know if my furnace needs repair or replacement?', 'a' => "If your furnace is under 15 years old and the repair cost is less than half of replacement, repair is usually the better choice. We'll give you honest guidance."],
         ],
         'seoText' => 'Trusted furnace repair in Tulsa, OK. OKIE Heating and Cooling provides fast, safe furnace repair for all brands. Serving Tulsa, Broken Arrow, Owasso, and nearby areas.',
+        'whyUs' => 'We stock common furnace ignition and blower parts on the truck, so most repairs finish in one visit.',
     ],
     [
         'slug' => 'furnace-installation', 'title' => 'Furnace Installation', 'shortTitle' => 'Furnace Install', 'category' => 'heating', 'icon' => 'flame', 'formValue' => 'furnace_installation',
@@ -157,6 +164,7 @@ const SERVICES = [
             ['q' => 'What size furnace do I need?', 'a' => "Furnace sizing depends on your home's size, insulation, and climate zone. We calculate the right size to ensure comfort without wasted energy."],
         ],
         'seoText' => 'Professional furnace installation in Tulsa, OK. Okie Heating and Cooling helps you upgrade to a high-efficiency furnace with expert installation and flexible financing.',
+        'whyUs' => 'Every furnace installation includes proper venting and code-compliant setup, not just a swapped box.',
     ],
     [
         'slug' => 'indoor-air-quality', 'title' => 'Indoor Air Quality', 'shortTitle' => 'Air Quality', 'category' => 'air-quality', 'icon' => 'wind', 'formValue' => 'indoor_air_quality',
@@ -175,6 +183,7 @@ const SERVICES = [
             ['q' => 'What indoor air quality products do you recommend?', 'a' => 'Depending on your needs, we may recommend HEPA filtration, UV germicidal lights, whole-home humidifiers or dehumidifiers, and air purification systems.'],
         ],
         'seoText' => 'Improve your indoor air quality in Tulsa with Okie Heating and Cooling. We install air purifiers, humidifiers, UV lights, and ventilation systems for healthier home air.',
+        'whyUs' => 'We evaluate your home\'s actual air quality before recommending a purifier, humidifier, or ventilation fix — not a one-size upsell.',
     ],
     [
         'slug' => 'thermostat-installation', 'title' => 'Thermostat Installation', 'shortTitle' => 'Thermostats', 'category' => 'controls', 'icon' => 'thermometer', 'formValue' => 'thermostat_installation',
@@ -193,6 +202,7 @@ const SERVICES = [
             ['q' => 'Which smart thermostats do you install?', 'a' => "We install Nest, Ecobee, Honeywell Home, and other popular smart thermostats. We'll recommend the best fit for your HVAC system."],
         ],
         'seoText' => 'Professional thermostat installation in Tulsa, OK. Upgrade to a smart thermostat with Okie Heating and Cooling for better comfort and energy savings.',
+        'whyUs' => 'We match the thermostat to your system\'s wiring and staging, so smart features actually work instead of short-cycling your equipment.',
     ],
     [
         'slug' => 'ductwork-services', 'title' => 'Ductwork Services', 'shortTitle' => 'Ductwork', 'category' => 'ductwork', 'icon' => 'air-vent', 'formValue' => 'ductwork',
@@ -211,6 +221,7 @@ const SERVICES = [
             ['q' => 'How do I know if my ductwork needs attention?', 'a' => 'Signs include uneven temperatures, excessive dust, high energy bills, and audible air leaks. A professional inspection can identify hidden issues.'],
         ],
         'seoText' => 'Ductwork installation, repair, and sealing in Tulsa, OK. Okie Heating and Cooling optimizes your duct system for better comfort and energy efficiency.',
+        'whyUs' => 'We inspect the whole duct run for leaks and sizing issues, not just the section you called about.',
     ],
     [
         'slug' => 'emergency-hvac', 'title' => 'Emergency HVAC Service', 'shortTitle' => 'Emergency', 'category' => 'emergency', 'icon' => 'alert-triangle', 'formValue' => 'emergency',
@@ -230,6 +241,7 @@ const SERVICES = [
             ['q' => 'Is there an extra charge for emergency service?', 'a' => 'Emergency calls may have a premium rate, but we always provide upfront pricing before beginning any work.'],
         ],
         'seoText' => '24/7 emergency HVAC service in Tulsa, OK. Okie Heating and Cooling provides fast emergency heating and air conditioning repair when you need it most.',
+        'whyUs' => 'A real technician answers the emergency line — dispatch starts the moment you call, day or night.',
     ],
     [
         'slug' => 'commercial-hvac', 'title' => 'Commercial HVAC', 'shortTitle' => 'Commercial', 'category' => 'commercial', 'icon' => 'building', 'formValue' => 'commercial',
@@ -248,6 +260,7 @@ const SERVICES = [
             ['q' => 'Do you service all types of commercial buildings?', 'a' => 'Yes, we service offices, retail stores, restaurants, warehouses, churches, and more. Contact us to discuss your specific needs.'],
         ],
         'seoText' => 'Commercial HVAC services in Tulsa, OK. Okie Heating and Cooling provides installation, repair, and maintenance for businesses throughout the Tulsa metro area.',
+        'whyUs' => 'We schedule install and major repair work around your business hours, so your operation doesn\'t have to close.',
     ],
 ];
 
@@ -268,35 +281,76 @@ const SERVICE_AREAS = [
     ['slug' => 'tulsa', 'name' => 'Tulsa', 'zip' => '74101-74199',
         'description' => "As Tulsa's premier HVAC company, we're proud to serve homeowners and businesses across Tulsa with fast, reliable heating and cooling services.",
         'highlights' => ['Same-day service available', 'Centrally located for fast response', 'Serving all Tulsa neighborhoods'],
-        'seoText' => 'Okie Heating and Cooling proudly serves Tulsa, Oklahoma with professional HVAC services including AC repair, heating repair, furnace installation, and 24/7 emergency service. As a locally owned and operated company, we understand the unique climate challenges Tulsa homeowners face — from scorching summers to unpredictable winter weather. Our certified technicians are available for same-day service across all Tulsa neighborhoods, from midtown to south Tulsa, providing honest pricing and quality workmanship you can trust.'],
+        'seoText' => 'Okie Heating and Cooling proudly serves Tulsa, Oklahoma with professional HVAC services including AC repair, heating repair, furnace installation, and 24/7 emergency service. As a locally owned and operated company, we understand the unique climate challenges Tulsa homeowners face — from scorching summers to unpredictable winter weather. Our certified technicians are available for same-day service across all Tulsa neighborhoods, from midtown to south Tulsa, providing honest pricing and quality workmanship you can trust.',
+        'intro' => "Tulsa is home base for Okie Heating and Cooling, so response time here doesn't include a commute — we're already in the city. Housing stock spans nearly a century: early-1900s bungalows near downtown and midtown sit a few miles from newer construction pushing into south Tulsa, so our technicians regularly move between original ductwork and knob-and-tube-era wiring on one call and a five-year-old variable-speed heat pump on the next. Oklahoma weather doesn't do half measures — summers routinely push into the upper 90s with heavy humidity, and winter can swing from mild to an ice storm within a few days, so Tulsa systems see the full range of seasonal strain a unit can face in a single year. We're in {{NEIGHBORHOODS_TULSA}} on a regular basis, and most of our team has lived in the area long enough to know which streets flood after a hard rain and which older neighborhoods have narrow driveways that change how we stage equipment.",
+        'faqs' => [
+            ['q' => 'Do you offer same-day service in Tulsa?', 'a' => 'For most routine calls within the city, yes — same-day or next-day is typical. Emergencies are dispatched as fast as possible.'],
+            ['q' => 'Which Tulsa neighborhoods do you cover?', 'a' => '{{NEIGHBORHOODS_TULSA}}, plus the rest of the city — if you\'re inside Tulsa, we service it.'],
+            ['q' => 'Do older Tulsa homes need different HVAC service?', 'a' => "Often, yes — older ductwork and electrical can affect installation options. We evaluate that during every estimate, not after the job starts."],
+        ]],
     ['slug' => 'broken-arrow', 'name' => 'Broken Arrow', 'zip' => '74011-74014',
         'description' => 'Broken Arrow families trust Okie Heating and Cooling for dependable HVAC repair, installation, and maintenance with fast response times.',
-        'highlights' => ['Fast service from nearby Tulsa', 'Residential and commercial HVAC', 'Trusted by Broken Arrow families'],
-        'seoText' => 'Need HVAC service in Broken Arrow, Oklahoma? Okie Heating and Cooling provides professional air conditioning repair, heating services, furnace installation, and emergency HVAC across Broken Arrow. Our proximity to Broken Arrow means faster response times and same-day availability for most services.'],
+        'highlights' => ['Quick response times', 'Residential and commercial HVAC', 'Trusted by Broken Arrow families'],
+        'seoText' => 'Need HVAC service in Broken Arrow, Oklahoma? Okie Heating and Cooling provides professional air conditioning repair, heating services, furnace installation, and emergency HVAC across Broken Arrow. Our proximity to Broken Arrow means faster response times and same-day availability for most services.',
+        'intro' => "Along the Kenosha and 51st Street corridor east of the city center is where you'll find Broken Arrow, roughly {{DRIVE_TIME_BROKEN_ARROW}} from our shop — close enough that it's one of our most-visited service areas in the Tulsa metro. The city's rapid growth through the 1990s and 2000s means a lot of the homes we work on have equipment original to that construction boom, now old enough to be due for a major repair or full replacement, sitting alongside a steady wave of new subdivisions still being built on the east side. That mix keeps our trucks stocked for both aging builder-grade systems and current high-efficiency equipment on the same route. Summers run just as hot and humid here as anywhere else in the metro, and Broken Arrow's larger, newer homes often mean bigger systems working harder to keep every room even — worth checking if one part of the house never quite cools down. We regularly work {{NEIGHBORHOODS_BROKEN_ARROW}}.",
+        'faqs' => [
+            ['q' => 'How far out is Broken Arrow from your base?', 'a' => 'About {{DRIVE_TIME_BROKEN_ARROW}} — it\'s one of our most-visited areas in the Tulsa metro, so scheduling is usually flexible.'],
+            ['q' => 'Do you service newer subdivisions in Broken Arrow?', 'a' => 'Yes — we work in both established neighborhoods and the newer developments still being built on the east side.'],
+        ]],
     ['slug' => 'owasso', 'name' => 'Owasso', 'zip' => '74055',
         'description' => 'Owasso homeowners and businesses count on Okie Heating and Cooling for expert HVAC services, from routine maintenance to emergency repairs.',
-        'highlights' => ['Serving Owasso and north Tulsa county', 'All heating and cooling services', 'Emergency response available'],
-        'seoText' => 'Professional HVAC services in Owasso, Oklahoma from Okie Heating and Cooling. We provide AC repair, heating installation, furnace maintenance, and 24/7 emergency service to Owasso homes and businesses.'],
+        'highlights' => ['Serving Owasso and the north side of the metro', 'All heating and cooling services', 'Emergency response available'],
+        'seoText' => 'Professional HVAC services in Owasso, Oklahoma from Okie Heating and Cooling. We provide AC repair, heating installation, furnace maintenance, and 24/7 emergency service to Owasso homes and businesses.',
+        'intro' => "Owasso sits north along the Highway 169 corridor, about {{DRIVE_TIME_OWASSO}} out — far enough to plan the drive, close enough that we're there often. Much of what we service is newer construction from the last fifteen to twenty years of the city's growth, which usually means single-stage builder equipment now reaching the age where efficiency drops off and service calls get more frequent. Being slightly north and at a marginally higher elevation than areas closer to the river, outdoor units here sometimes face different wind exposure, which our installers account for when mounting or replacing a condenser. Homeowners' associations are common in Owasso's newer developments, and we're used to working within their equipment-placement and screening rules without it slowing a job down. We're familiar with {{NEIGHBORHOODS_OWASSO}} from repeat visits.",
+        'faqs' => [
+            ['q' => 'Do you work with Owasso HOAs on equipment placement?', 'a' => "Yes, we're familiar with the screening and placement rules common in Owasso's newer developments and plan installs around them."],
+            ['q' => 'Is Owasso within your emergency service area?', 'a' => 'Yes — emergency dispatch covers Owasso the same as the rest of the Tulsa metro.'],
+        ]],
     ['slug' => 'bixby', 'name' => 'Bixby', 'zip' => '74008',
         'description' => 'Bixby residents rely on Okie Heating and Cooling for high-quality HVAC solutions, from new system installations to quick repairs.',
         'highlights' => ['Full HVAC services in Bixby', 'Growing community expertise', 'Quality installations and repairs'],
-        'seoText' => 'Okie Heating and Cooling provides trusted HVAC services in Bixby, Oklahoma including AC repair, heating repair, new system installation, and preventive maintenance plans.'],
+        'seoText' => 'Okie Heating and Cooling provides trusted HVAC services in Bixby, Oklahoma including AC repair, heating repair, new system installation, and preventive maintenance plans.',
+        'intro' => "Bixby, along the Arkansas River, is about {{DRIVE_TIME_BIXBY}} from our base — it's grown quickly enough in the last decade that we've had to keep expanding how much of the city we cover. New-build subdivisions dominate a lot of our Bixby calls, which means most systems we touch are still within their original warranty window; when something does go wrong this early, we look hard for an installation issue before assuming the equipment is at fault. Older pockets of the city closer to the river have mature trees that shade outdoor units for part of the day — good for efficiency, but it also means more leaf and debris buildup than a wide-open new subdivision, so maintenance visits here often include extra coil cleaning. We know {{NEIGHBORHOODS_BIXBY}} well from routine service.",
+        'faqs' => [
+            ['q' => 'Do you service new-construction homes in Bixby?', 'a' => "Yes — a lot of our Bixby calls are newer builds, and we always check for an installation issue first if equipment fails early."],
+            ['q' => 'How often should Bixby homeowners get a tune-up?', 'a' => 'Twice a year — once before summer, once before winter — is standard for keeping a system efficient here.'],
+        ]],
     ['slug' => 'jenks', 'name' => 'Jenks', 'zip' => '74037',
         'description' => 'From the Riverwalk to your doorstep — Okie Heating and Cooling brings fast, professional HVAC service to Jenks homeowners.',
-        'highlights' => ['Quick service from Tulsa HQ', 'Residential HVAC specialists', 'Maintenance plans available'],
-        'seoText' => 'HVAC repair, installation, and maintenance in Jenks, Oklahoma. Okie Heating and Cooling serves the Jenks community with professional heating and air conditioning services.'],
+        'highlights' => ['Quick service from our nearby base', 'Residential HVAC specialists', 'Maintenance plans available'],
+        'seoText' => 'HVAC repair, installation, and maintenance in Jenks, Oklahoma. Okie Heating and Cooling serves the Jenks community with professional heating and air conditioning services.',
+        'intro' => "Jenks, best known around the metro for the Riverwalk, is a short trip from our base — about {{DRIVE_TIME_JENKS}}. It's a smaller city with a mix of long-established neighborhoods near the river and newer construction further out, so on any given week we might be replacing a decades-old system in one house and doing a routine tune-up on a five-year-old unit a few blocks away. Homes closer to the water table here occasionally have higher indoor humidity, which shows up as musty smells or visible condensation on ductwork if a system isn't sized or dehumidifying correctly — something we check for specifically on Jenks service calls. We're regularly in {{NEIGHBORHOODS_JENKS}}.",
+        'faqs' => [
+            ['q' => 'Do you service homes near the Jenks Riverwalk?', 'a' => 'Yes, that whole area is part of our regular Jenks coverage.'],
+            ['q' => 'Can humidity near the river affect my system?', 'a' => "It can show up as musty smells or condensation on ductwork if a system isn't sized correctly — we check for that specifically on Jenks visits."],
+        ]],
     ['slug' => 'sand-springs', 'name' => 'Sand Springs', 'zip' => '74063',
         'description' => "Sand Springs families trust us for honest HVAC work. From AC tune-ups to full system replacements, we've got you covered.",
-        'highlights' => ['Serving west Tulsa county', 'Honest pricing and quality work', 'All makes and models serviced'],
-        'seoText' => 'Reliable HVAC services in Sand Springs, Oklahoma. Okie Heating and Cooling provides heating and cooling repair, installation, and maintenance to Sand Springs homes and businesses.'],
+        'highlights' => ['Serving the west side of the metro', 'Honest pricing and quality work', 'All makes and models serviced'],
+        'seoText' => 'Reliable HVAC services in Sand Springs, Oklahoma. Okie Heating and Cooling provides heating and cooling repair, installation, and maintenance to Sand Springs homes and businesses.',
+        'intro' => "West on the other side of the Arkansas River, Sand Springs is about {{DRIVE_TIME_SAND_SPRINGS}} from our shop. It's an older community by metro standards, so a good share of the homes we service still have their original ductwork, and aging attic or crawlspace duct runs here are a common source of the efficiency losses we find during a tune-up. The terrain west of the river runs a little hillier than areas closer to the city center, which can affect how well a system pulls air through longer duct runs in split-level homes — something our technicians check on installs and major repairs alike. Summers hit Sand Springs just as hard as the rest of the region, and older homes with less attic insulation tend to run their AC longer to keep up. We work in {{NEIGHBORHOODS_SAND_SPRINGS}} often.",
+        'faqs' => [
+            ['q' => 'Do older Sand Springs homes need duct repairs more often?', 'a' => 'Often, yes — a lot of the original ductwork in this area is a common source of efficiency loss we find during tune-ups.'],
+            ['q' => 'How far is Sand Springs from your shop?', 'a' => 'About {{DRIVE_TIME_SAND_SPRINGS}} — we cover it regularly.'],
+        ]],
     ['slug' => 'sapulpa', 'name' => 'Sapulpa', 'zip' => '74066',
         'description' => 'Sapulpa homeowners count on Okie Heating and Cooling for affordable, professional HVAC services delivered with integrity.',
         'highlights' => ['Affordable HVAC services', 'Experienced Sapulpa technicians', 'Emergency service available'],
-        'seoText' => 'Okie Heating and Cooling serves Sapulpa, Oklahoma with professional HVAC services. From AC repair to furnace installation, we keep Sapulpa homes comfortable year-round.'],
+        'seoText' => 'Okie Heating and Cooling serves Sapulpa, Oklahoma with professional HVAC services. From AC repair to furnace installation, we keep Sapulpa homes comfortable year-round.',
+        'intro' => "Sapulpa, southwest along old Route 66, is roughly {{DRIVE_TIME_SAPULPA}} away — outside our most-frequent service radius, but we cover it regularly. The city has a long history, and a good number of the homes we visit are older builds with systems that have been repaired and patched over the years rather than replaced outright; part of our first visit to a new Sapulpa customer is usually figuring out what's actually original equipment versus what's been swapped in piecemeal over time. Newer development has picked up on the edges of town, so we also see a growing share of modern systems alongside the older stock. Being further from the metro core, same-day scheduling here depends more on route timing than in closer suburbs, so we recommend booking ahead when it's not an emergency. We know {{NEIGHBORHOODS_SAPULPA}} from regular calls.",
+        'faqs' => [
+            ['q' => 'Should I book ahead for non-emergency service in Sapulpa?', 'a' => 'We recommend it — Sapulpa is outside our closest service radius, so non-urgent visits depend more on route timing.'],
+            ['q' => 'Do you work on older HVAC systems in Sapulpa?', 'a' => "Yes — a lot of what we see there has been repaired over the years rather than replaced, and we start by figuring out what's actually original equipment."],
+        ]],
     ['slug' => 'glenpool', 'name' => 'Glenpool', 'zip' => '74033',
         'description' => 'Glenpool residents enjoy fast, friendly HVAC service from Okie Heating and Cooling — your local heating and cooling experts.',
-        'highlights' => ['Serving south Tulsa county', 'Friendly, professional service', 'Full range of HVAC solutions'],
-        'seoText' => 'Professional HVAC services in Glenpool, Oklahoma from Okie Heating and Cooling. We provide air conditioning repair, heating services, and new system installations for Glenpool families.'],
+        'highlights' => ['Serving the south side of the metro', 'Friendly, professional service', 'Full range of HVAC solutions'],
+        'seoText' => 'Professional HVAC services in Glenpool, Oklahoma from Okie Heating and Cooling. We provide air conditioning repair, heating services, and new system installations for Glenpool families.',
+        'intro' => "Glenpool sits south along Highway 75, about {{DRIVE_TIME_GLENPOOL}} from our base. It's grown steadily as families have moved further out for more space, so a lot of our Glenpool work is on homes built within the last two decades — generally in good shape, but reaching the point where original compressors and furnaces start needing attention. The area's more open, newer-subdivision layout means less mature tree cover than some of the older metro neighborhoods, so outdoor units here often run in more direct sun for more of the day, which our technicians factor into refrigerant charge checks during summer maintenance visits. We regularly service {{NEIGHBORHOODS_GLENPOOL}}.",
+        'faqs' => [
+            ['q' => 'Are Glenpool systems usually newer?', 'a' => 'Mostly — a lot of the homes we service were built in the last two decades, though original equipment is starting to need more attention.'],
+            ['q' => 'Does more direct sun exposure affect my AC in Glenpool?', 'a' => 'It can — less mature tree cover means outdoor units often run in more direct sun, which we factor into refrigerant checks during summer maintenance.'],
+        ]],
 ];
 
 // ---------------------------------------------------------------------------

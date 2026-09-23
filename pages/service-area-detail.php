@@ -5,6 +5,7 @@ $seo = [
     'description' => $area['seoText'] ?: $area['description'],
     'path' => '/service-areas/' . $area['slug'],
     'jsonLd' => area_business_jsonld($area),
+    'extraJsonLd' => !empty($area['faqs']) ? faq_jsonld($area['faqs']) : null,
 ];
 $areaToken = strtoupper(str_replace([' ', '-'], '_', $area['name']));
 $areaReview = null;
@@ -28,6 +29,12 @@ require SITE_ROOT . '/includes/layout/header.php';
   </div>
 </section>
 
+<section class="section-sm">
+  <div class="container-md reveal">
+    <p class="lead muted leading-relaxed"><?= e($area['intro']) ?></p>
+  </div>
+</section>
+
 <section class="section">
   <div class="container-md reveal">
     <h2 class="h2 text-center mb-8">Why <?= e($area['name']) ?> Chooses Okie Heating and Cooling</h2>
@@ -45,9 +52,9 @@ require SITE_ROOT . '/includes/layout/header.php';
       <h2 class="h2">Services Available in <?= e($area['name']) ?></h2>
       <p class="lead muted">Full range of heating and cooling services for <?= e($area['name']) ?> homes and businesses.</p>
     </div>
-    <div class="grid-3 gap-6">
-      <?php foreach (array_slice(SERVICES, 0, 6) as $i => $svc): ?>
-        <div class="reveal" data-delay="<?= $i ?>"><?php component('service-card', ['service' => $svc]); ?></div>
+    <div class="grid-3 gap-4">
+      <?php foreach (SERVICES as $i => $svc): ?>
+        <div class="reveal" data-delay="<?= $i % 6 ?>"><?php component('service-card', ['service' => $svc, 'compact' => true]); ?></div>
       <?php endforeach; ?>
     </div>
   </div>
@@ -55,21 +62,19 @@ require SITE_ROOT . '/includes/layout/header.php';
 
 <section class="section">
   <div class="container-md reveal">
-    <div class="grid-2 gap-6">
-      <div class="card">
-        <h3 class="h5 mb-3">Neighborhoods We Serve in <?= e($area['name']) ?></h3>
-        <p class="muted">{{<?= e($areaToken) ?>_NEIGHBORHOODS}}</p>
-      </div>
-      <div class="card">
-        <h3 class="h5 mb-3">Recent Job in <?= e($area['name']) ?></h3>
-        <p class="muted">{{<?= e($areaToken) ?>_RECENT_JOB}}</p>
-      </div>
+    <div class="card">
+      <h3 class="h5 mb-3">Recent Job in <?= e($area['name']) ?></h3>
+      <p class="muted">{{RECENT_JOB_<?= e($areaToken) ?>}}</p>
     </div>
     <?php if ($areaReview): ?>
       <div class="mt-6"><?php component('testimonial-card', ['t' => $areaReview]); ?></div>
     <?php endif; ?>
   </div>
 </section>
+
+<?php if (!empty($area['faqs'])): ?>
+  <?php component('faq-section', ['faqs' => $area['faqs'], 'title' => 'Questions From ' . $area['name'] . ' Homeowners']); ?>
+<?php endif; ?>
 
 <?php component('cta-banner', ['variant' => 'dark', 'headline' => 'Ready for HVAC Service in ' . $area['name'] . '?', 'subheadline' => 'Book online or call us for fast, reliable heating and cooling service in ' . $area['name'] . ', Oklahoma.']); ?>
 <?php require SITE_ROOT . '/includes/layout/footer.php'; ?>
