@@ -625,7 +625,8 @@ img { max-width: 100%; height: auto; }
 @media (min-width: 1024px) { .area-hub-h1 { font-size: 3.125rem; margin-bottom: 1.25rem; } }
 .area-hub-hero .hero-sub { margin-bottom: 1.75rem; }
 
-.zip-card { background: #fff; border-radius: var(--radius); padding: 1.25rem; color: var(--fg); max-width: 30rem; }
+.zip-card { background: #fff; border-radius: var(--radius); padding: 1.25rem; color: var(--fg); }
+@media (min-width: 1024px) { .zip-card { max-width: 30rem; } }
 .zip-card label { display: block; font-weight: 600; margin-bottom: .625rem; font-size: .9375rem; }
 .zip-row { display: flex; gap: .625rem; }
 .zip-row input { flex: 1; min-width: 0; height: 2.75rem; padding: 0 1rem; border: 1px solid var(--border); border-radius: calc(var(--radius) - .125rem); font: inherit; font-size: 1rem; }
