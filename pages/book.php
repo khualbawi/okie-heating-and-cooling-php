@@ -5,6 +5,8 @@ $seo = [
     'path' => '/book',
 ];
 $preSelected = preg_replace('/[^a-z_]/', '', (string) ($_GET['service'] ?? ''));
+$preCityArea = get_area_by_slug((string) ($_GET['city'] ?? ''));
+$preCity = $preCityArea['name'] ?? '';
 $steps = [
     ['Submit Your Request', 'Fill out the form with your details and preferred schedule.'],
     ['We Confirm', 'Our team will call or email to confirm your appointment within a few hours.'],
@@ -50,7 +52,7 @@ require SITE_ROOT . '/includes/layout/header.php';
       <div class="card reveal" data-delay="1">
         <h2 class="h3 mb-2">Service Request</h2>
         <p class="small muted mb-6">Tell us what you need and we'll get back to you quickly.</p>
-        <?php component('service-request-form', ['source' => 'book_page', 'defaultService' => $preSelected]); ?>
+        <?php component('service-request-form', ['source' => 'book_page', 'defaultService' => $preSelected, 'defaultCity' => $preCity]); ?>
       </div>
     </div>
   </div>

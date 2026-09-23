@@ -3,11 +3,12 @@
  * Service request form. Progressive enhancement: works without JS (POST + redirect),
  * enhanced by assets/js/main.js (fetch + inline success state).
  *
- * Vars: $source, $defaultService, $defaultUrgency, $compact, $serviceLabel,
+ * Vars: $source, $defaultService, $defaultCity, $defaultUrgency, $compact, $serviceLabel,
  *       $servicePlaceholder, $messageLabel, $messagePlaceholder
  */
 $source             = $source             ?? 'general';
 $defaultService     = $defaultService     ?? '';
+$defaultCity        = $defaultCity        ?? '';
 $defaultUrgency     = $defaultUrgency     ?? 'routine';
 $compact            = $compact            ?? false;
 $serviceLabel       = $serviceLabel       ?? 'Service Needed *';
@@ -75,7 +76,7 @@ $formError = $_GET['error'] ?? '';
       </div>
       <div class="field">
         <label for="<?= $uid ?>-city">City</label>
-        <input id="<?= $uid ?>-city" name="city" type="text" placeholder="Tulsa" autocomplete="address-level2">
+        <input id="<?= $uid ?>-city" name="city" type="text" placeholder="Tulsa" autocomplete="address-level2" value="<?= e($defaultCity) ?>">
       </div>
     </div>
     <div class="grid-3">
