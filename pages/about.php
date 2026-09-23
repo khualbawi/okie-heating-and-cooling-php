@@ -80,6 +80,7 @@ require SITE_ROOT . '/includes/layout/header.php';
   <div class="container-md text-center reveal">
     <h2 class="h2 mb-4">Licensed, Insured &amp; Certified</h2>
     <p class="muted">Our technicians hold industry certifications including EPA Section 608, NATE, and manufacturer-specific credentials. We're fully licensed and insured for your protection and peace of mind.</p>
+    <p class="small muted mt-2">Oklahoma Mechanical License <?= e(LICENSE_NUMBER) ?></p>
   </div>
 </section>
 

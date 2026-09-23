@@ -8,8 +8,7 @@
       </div>
       <p class="footer-tagline">Tulsa's trusted HVAC professionals. Keeping homes and businesses comfortable year-round with honest, quality service.</p>
       <div class="footer-contact">
-        <div class="footer-contact-row"><?= icon('phone', 'icon-sm') ?><div><div class="footer-contact-label">Office</div><a href="<?= OFFICE_PHONE_HREF ?>"><?= e(OFFICE_PHONE_NUMBER) ?></a></div></div>
-        <div class="footer-contact-row"><?= icon('phone', 'icon-sm') ?><div><div class="footer-contact-label">Emergency (24/7)</div><a href="<?= EMERGENCY_PHONE_HREF ?>"><?= e(EMERGENCY_PHONE_NUMBER) ?></a></div></div>
+        <div class="footer-contact-row"><?= icon('phone', 'icon-sm') ?><div><div class="footer-contact-label">Office &amp; 24/7 Emergency</div><a href="<?= OFFICE_PHONE_HREF ?>"><?= e(OFFICE_PHONE_NUMBER) ?></a></div></div>
         <a href="mailto:<?= e(EMAIL) ?>" class="footer-contact-row"><?= icon('mail', 'icon-sm') ?> <?= e(EMAIL) ?></a>
         <div class="footer-contact-row"><?= icon('map-pin', 'icon-sm') ?> <?= e(ADDRESS) ?></div>
         <div class="footer-contact-row align-start"><?= icon('clock', 'icon-sm') ?><div><p>Mon–Fri: <?= e(HOURS['weekday']) ?></p><p>Sat–Sun: Emergency Only</p></div></div>

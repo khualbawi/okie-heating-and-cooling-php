@@ -132,7 +132,7 @@ $homeServices = array_filter(SERVICES, fn($s) => in_array($s['slug'], $homeServi
 
 <?php component('faq-section', ['faqs' => HOME_FAQS, 'title' => 'Common Questions', 'subtitle' => 'Quick answers about our HVAC services in Tulsa']); ?>
 
-<?php component('cta-banner', ['variant' => 'dark']); ?>
+<?php component('cta-banner', ['variant' => 'dark', 'showPhone' => false]); ?>
 
 <section class="seo-block">
   <div class="container-sm prose">
