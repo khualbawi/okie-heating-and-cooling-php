@@ -78,9 +78,11 @@ $navLinks = [
   <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter-latin-var.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/jakarta-latin-var.woff2" crossorigin>
 
-  <script type="application/ld+json"><?= json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
+  <?php // JSON_HEX_TAG stops a "</script>" inside any interpolated string (an area
+        // name, FAQ text, a future admin-editable field) from closing this tag early. ?>
+  <script type="application/ld+json"><?= json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?></script>
 <?php if (!empty($seo['extraJsonLd'])): ?>
-  <script type="application/ld+json"><?= json_encode($seo['extraJsonLd'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
+  <script type="application/ld+json"><?= json_encode($seo['extraJsonLd'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?></script>
 <?php endif; ?>
 </head>
 <body>
