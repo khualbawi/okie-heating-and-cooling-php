@@ -577,7 +577,15 @@ a.contact-row:hover .muted { color: var(--fg); }
 
 .legal-content h2 { margin-top: 2rem; }
 .legal-content h2:first-of-type { margin-top: 0; }
+.legal-content h3 { margin-top: 1.5rem; font-size: 1.0625rem; }
 .legal-content p { color: var(--muted-fg); line-height: 1.7; margin-top: .5rem; }
+.legal-content ul { color: var(--muted-fg); line-height: 1.7; margin-top: .5rem; padding-left: 1.25rem; }
+.legal-content ul li { margin-top: .25rem; }
+.legal-content code { background: var(--muted); border-radius: .25rem; padding: .1rem .35rem; font-size: .875em; }
+.legal-content table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .8125rem; }
+.legal-content th, .legal-content td { border: 1px solid var(--border); padding: .5rem .625rem; text-align: left; vertical-align: top; }
+.legal-content th { background: var(--muted); font-weight: 600; }
+.legal-content table + p, .legal-content h3 + p { margin-top: 1rem; }
 .legal-draft-notice { background: var(--amber-50, #fffbeb); border: 1px solid var(--amber-200, #fde68a); color: var(--amber-800, #92400e); border-radius: .5rem; padding: .75rem 1rem; font-size: .875rem; margin-bottom: 2rem; }
 
 /* ---------- Mobile CTA bar ---------- */
