@@ -77,9 +77,13 @@ function deploy_version(): string
         }
     }
 
+    // Used as a cache-directory name below, so constrain the charset the same way
+    // the git-hash branch above does — no "/" or other path metacharacters, and no
+    // ".." (a bare dot/dash charset still allows that as a value).
     $versionFile = SITE_ROOT . '/VERSION';
     $ver = is_readable($versionFile) ? trim((string) @file_get_contents($versionFile)) : '';
-    return $v = $ver !== '' ? $ver : 'dev';
+    $safe = preg_match('/^[A-Za-z0-9._-]{1,64}$/', $ver) === 1 && !str_contains($ver, '..');
+    return $v = $safe ? $ver : 'dev';
 }
 
 /** Cache "build id": the deploy version. Kept as its own name since it's what the
