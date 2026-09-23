@@ -11,21 +11,61 @@
     onScroll();
   }
 
-  /* ---------- Desktop dropdown (keyboard + hover) ---------- */
-  document.querySelectorAll('.nav-item.has-dropdown').forEach(function (item) {
-    var trigger = item.querySelector('.nav-link');
-    var menu = item.querySelector('.dropdown');
-    var open = function () { item.classList.add('is-open'); trigger.setAttribute('aria-expanded', 'true'); };
-    var close = function () { item.classList.remove('is-open'); trigger.setAttribute('aria-expanded', 'false'); };
-    item.addEventListener('mouseenter', open);
-    item.addEventListener('mouseleave', close);
-    item.addEventListener('focusin', open);
-    item.addEventListener('focusout', function (e) { if (!item.contains(e.relatedTarget)) close(); });
-    trigger.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); open(); var f = menu.querySelector('a'); if (f) f.focus(); }
+  /* ---------- Desktop dropdown / mega-menu (hover-intent + click + keyboard) ---------- */
+  document.querySelectorAll('.nav-item.has-dropdown, .nav-item.has-megamenu').forEach(function (item) {
+    var caret = item.querySelector('.nav-caret');
+    var menu = item.querySelector('.dropdown, .megamenu');
+    if (!caret || !menu) return;
+    var hoverTimer = null;
+
+    var open = function () {
+      clearTimeout(hoverTimer);
+      document.querySelectorAll('.nav-item.is-open').forEach(function (other) { if (other !== item) closeItem(other); });
+      item.classList.add('is-open');
+      caret.setAttribute('aria-expanded', 'true');
+    };
+    var close = function () { closeItem(item); };
+    function closeItem(el) {
+      var c = el.querySelector('.nav-caret');
+      el.classList.remove('is-open');
+      if (c) c.setAttribute('aria-expanded', 'false');
+    }
+
+    item.addEventListener('mouseenter', function () {
+      clearTimeout(hoverTimer);
+      hoverTimer = setTimeout(open, 150);
+    });
+    item.addEventListener('mouseleave', function () {
+      clearTimeout(hoverTimer);
+      hoverTimer = setTimeout(close, 150);
+    });
+
+    caret.addEventListener('click', function () {
+      if (item.classList.contains('is-open')) close(); else open();
+    });
+    caret.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault(); open();
+        var f = menu.querySelector('a'); if (f) f.focus();
+      }
       if (e.key === 'Escape') { e.preventDefault(); close(); }
     });
-    menu.addEventListener('keydown', function (e) { if (e.key === 'Escape') { e.preventDefault(); close(); trigger.focus(); } });
+
+    item.addEventListener('focusout', function (e) {
+      if (!item.contains(e.relatedTarget)) close();
+    });
+    menu.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { e.preventDefault(); close(); caret.focus(); }
+    });
+  });
+  document.addEventListener('click', function (e) {
+    document.querySelectorAll('.nav-item.is-open').forEach(function (item) {
+      if (!item.contains(e.target)) {
+        item.classList.remove('is-open');
+        var c = item.querySelector('.nav-caret');
+        if (c) c.setAttribute('aria-expanded', 'false');
+      }
+    });
   });
 
   /* ---------- Mobile menu ---------- */

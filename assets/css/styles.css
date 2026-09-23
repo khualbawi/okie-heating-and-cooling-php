@@ -237,16 +237,31 @@ iframe { border: 0; }
 @media (min-width: 1024px) { .logo-img { height: 4rem; } }
 .site-header.is-scrolled .logo-img { height: 2.5rem; }
 .desktop-nav { display: none; align-items: center; gap: .25rem; }
-@media (min-width: 1024px) { .desktop-nav { display: flex; } }
-.nav-item { position: relative; }
+@media (min-width: 1024px) { .desktop-nav { display: flex; align-items: center; } }
+.nav-item { position: relative; display: flex; align-items: center; }
 .nav-link { display: flex; align-items: center; gap: .25rem; padding: .5rem .75rem; font-size: 1rem; font-weight: 500; border-radius: .5rem; color: var(--muted-fg); transition: color .15s, background .15s; }
 .nav-link:hover { color: var(--fg); background: var(--muted); }
 .nav-link.is-active { color: var(--primary); background: var(--primary-5); }
 .nav-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.dropdown { position: absolute; top: 100%; left: 0; margin-top: .25rem; width: 14rem; background: var(--card); border: 1px solid var(--border); border-radius: .75rem; box-shadow: var(--shadow-xl); padding: .5rem; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .15s, transform .15s, visibility .15s; }
-.nav-item.is-open .dropdown, .nav-item:hover .dropdown, .nav-item:focus-within .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+.nav-caret { display: inline-flex; align-items: center; justify-content: center; width: 1.75rem; height: 1.75rem; border-radius: .5rem; color: var(--muted-fg); background: none; }
+.nav-caret:hover { color: var(--fg); background: var(--muted); }
+.nav-caret:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.nav-item.is-open .nav-caret svg { transform: rotate(180deg); }
+.nav-caret svg { transition: transform .15s; }
+.dropdown { position: absolute; top: 100%; left: 0; margin-top: .25rem; width: 14rem; background: var(--card); border: 1px solid var(--border); border-radius: .75rem; box-shadow: var(--shadow-xl); padding: .5rem; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .15s, transform .15s, visibility .15s; max-height: 70vh; overflow-y: auto; }
+.nav-item.is-open .dropdown, .nav-item.is-open .megamenu { opacity: 1; visibility: visible; transform: translateY(0); }
 .dropdown-link { display: block; padding: .5rem .75rem; font-size: .875rem; border-radius: .5rem; color: var(--muted-fg); }
 .dropdown-link:hover, .dropdown-link:focus-visible { color: var(--fg); background: var(--muted); outline: none; }
+.dropdown-link-accent { color: var(--accent); font-weight: 600; }
+
+/* ---------- Services mega-menu ---------- */
+.megamenu { position: absolute; top: 100%; left: 50%; transform: translate(-50%, 8px); margin-top: .25rem; width: 42rem; max-width: 90vw; background: var(--card); border: 1px solid var(--border); border-radius: .75rem; box-shadow: var(--shadow-xl); padding: 1rem; display: grid; grid-template-columns: repeat(3, 1fr) 12rem; gap: .5rem 1rem; opacity: 0; visibility: hidden; transition: opacity .15s, transform .15s, visibility .15s; }
+.nav-item.is-open .megamenu { transform: translate(-50%, 0); }
+.megamenu-heading { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted-fg); padding: .5rem .75rem .25rem; }
+.megamenu-emergency { border-left: 1px solid var(--border); padding-left: 1rem; display: flex; flex-direction: column; gap: .5rem; }
+.megamenu-emergency-card { display: flex; flex-direction: column; gap: .125rem; background: var(--red-600); color: #fff; border-radius: .625rem; padding: .75rem; font-weight: 700; font-size: .875rem; }
+.megamenu-emergency-card small { font-weight: 500; opacity: .9; font-size: .75rem; }
+.megamenu-emergency-card:hover { background: var(--red-700, #b91c1c); }
 .header-actions { display: flex; align-items: center; gap: .5rem; }
 .header-phone { display: none; }
 @media (min-width: 768px) { .header-phone { display: inline-flex; } }
@@ -260,14 +275,22 @@ iframe { border: 0; }
 .mobile-menu { position: fixed; top: 0; right: 0; bottom: 0; width: 20rem; max-width: 90vw; background: var(--card); z-index: 70; transform: translateX(100%); transition: transform .3s ease; overflow-y: auto; box-shadow: var(--shadow-xl); }
 .mobile-menu.is-open { transform: translateX(0); }
 .mobile-menu-inner { padding: 1.5rem; }
-.mobile-menu-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
-.mobile-nav-link { display: block; padding: .75rem 1rem; border-radius: .5rem; font-size: .875rem; font-weight: 500; color: var(--muted-fg); }
+.mobile-menu-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.mobile-menu-call { margin-bottom: 1.5rem; min-height: 48px; }
+.mobile-nav-link { display: flex; align-items: center; min-height: 48px; padding: .75rem 1rem; border-radius: .5rem; font-size: 1rem; font-weight: 500; color: var(--fg); }
 .mobile-nav-link:hover { background: var(--muted); }
 .mobile-nav-link.is-active { background: var(--primary-10); color: var(--primary); }
-.mobile-subnav { padding-left: 1rem; }
-.mobile-subnav-link { display: block; padding: .5rem 1rem; border-radius: .5rem; font-size: .75rem; color: var(--muted-fg); }
+.mobile-accordion summary { list-style: none; cursor: pointer; }
+.mobile-accordion summary::-webkit-details-marker { display: none; }
+.mobile-accordion summary { position: relative; }
+.mobile-accordion summary::after { content: ''; position: absolute; right: 1rem; top: 50%; width: .55rem; height: .55rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-65%) rotate(45deg); transition: transform .15s; }
+.mobile-accordion[open] summary::after { transform: translateY(-35%) rotate(-135deg); }
+.mobile-subnav { padding-left: .5rem; }
+.mobile-subnav-heading { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted-fg); padding: .5rem 1rem .25rem; }
+.mobile-subnav-link { display: flex; align-items: center; min-height: 44px; padding: .5rem 1rem; border-radius: .5rem; font-size: .875rem; color: var(--muted-fg); }
 .mobile-subnav-link:hover { background: var(--muted); }
-.mobile-menu-ctas { margin-top: 2rem; display: flex; flex-direction: column; gap: .75rem; }
+.mobile-subnav-link-accent { color: var(--accent); font-weight: 600; }
+.mobile-menu-ctas { margin-top: 1.5rem; display: flex; flex-direction: column; gap: .75rem; }
 body.menu-open { overflow: hidden; }
 
 /* Dark sections sit on --primary navy; --accent is tuned dark for AA contrast

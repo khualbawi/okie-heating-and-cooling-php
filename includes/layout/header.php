@@ -19,17 +19,21 @@ $canonical = abs_url($seo['path']);
 $jsonLd    = $seo['jsonLd'] ?? local_business_jsonld();
 $isActive  = fn(string $p) => current_path() === $p || ($p !== '/' && str_starts_with(current_path(), $p));
 
-$navLinks = [
-    ['label' => 'Home', 'path' => '/'],
-    ['label' => 'Services', 'path' => '/services', 'children' => [
-        ['label' => 'AC Repair', 'path' => '/services/ac-repair'],
-        ['label' => 'AC Installation', 'path' => '/services/ac-installation'],
-        ['label' => 'Heating Repair', 'path' => '/services/heating-repair'],
-        ['label' => 'Furnace Repair', 'path' => '/services/furnace-repair'],
-        ['label' => 'Emergency HVAC', 'path' => '/services/emergency-hvac'],
-        ['label' => 'View All Services', 'path' => '/services'],
-    ]],
-    ['label' => 'Service Areas', 'path' => '/service-areas'],
+// Mega-menu columns are built from SERVICES, never hardcoded, so a new/renamed
+// service shows up here automatically. Emergency HVAC gets its own red card
+// instead of a spot in a column.
+$svcByCategory = ['cooling' => [], 'heating' => [], 'more' => []];
+foreach (SERVICES as $svc) {
+    if ($svc['slug'] === 'emergency-hvac') {
+        continue;
+    }
+    $bucket = in_array($svc['category'], ['cooling', 'heating'], true) ? $svc['category'] : 'more';
+    $svcByCategory[$bucket][] = $svc;
+}
+$emergencyService = get_service_by_slug('emergency-hvac');
+
+$simpleNavLinks = [
+    ['label' => 'Financing', 'path' => '/financing'],
     ['label' => 'About', 'path' => '/about'],
     ['label' => 'Reviews', 'path' => '/reviews'],
     ['label' => 'Contact', 'path' => '/contact'],
@@ -106,21 +110,54 @@ ob_start();
     </a>
 
     <nav class="desktop-nav" aria-label="Primary">
-      <?php foreach ($navLinks as $link): ?>
-        <?php if (!empty($link['children'])): ?>
-          <div class="nav-item has-dropdown">
-            <a href="<?= e($link['path']) ?>" class="nav-link<?= $isActive($link['path']) ? ' is-active' : '' ?>" aria-haspopup="true" aria-expanded="false">
-              <?= e($link['label']) ?> <?= icon('chevron-down', 'icon-sm') ?>
-            </a>
-            <div class="dropdown" role="menu" aria-label="<?= e($link['label']) ?> menu">
-              <?php foreach ($link['children'] as $child): ?>
-                <a href="<?= e($child['path']) ?>" role="menuitem" class="dropdown-link"><?= e($child['label']) ?></a>
-              <?php endforeach; ?>
-            </div>
+      <div class="nav-item has-megamenu">
+        <a href="/services" class="nav-link<?= $isActive('/services') ? ' is-active' : '' ?>"<?= $isActive('/services') ? ' aria-current="page"' : '' ?>>Services</a>
+        <button type="button" class="nav-caret" aria-haspopup="true" aria-expanded="false" aria-controls="services-megamenu" aria-label="Show services menu"><?= icon('chevron-down', 'icon-sm') ?></button>
+        <div class="megamenu" id="services-megamenu" role="menu" aria-label="Services menu">
+          <div class="megamenu-col">
+            <p class="megamenu-heading">Cooling</p>
+            <?php foreach ($svcByCategory['cooling'] as $svc): ?>
+              <a href="/services/<?= e($svc['slug']) ?>" role="menuitem" class="dropdown-link"><?= e($svc['title']) ?></a>
+            <?php endforeach; ?>
           </div>
-        <?php else: ?>
-          <a href="<?= e($link['path']) ?>" class="nav-link<?= current_path() === $link['path'] ? ' is-active' : '' ?>"<?= current_path() === $link['path'] ? ' aria-current="page"' : '' ?>><?= e($link['label']) ?></a>
-        <?php endif; ?>
+          <div class="megamenu-col">
+            <p class="megamenu-heading">Heating</p>
+            <?php foreach ($svcByCategory['heating'] as $svc): ?>
+              <a href="/services/<?= e($svc['slug']) ?>" role="menuitem" class="dropdown-link"><?= e($svc['title']) ?></a>
+            <?php endforeach; ?>
+          </div>
+          <div class="megamenu-col">
+            <p class="megamenu-heading">More</p>
+            <?php foreach ($svcByCategory['more'] as $svc): ?>
+              <a href="/services/<?= e($svc['slug']) ?>" role="menuitem" class="dropdown-link"><?= e($svc['title']) ?></a>
+            <?php endforeach; ?>
+          </div>
+          <div class="megamenu-col megamenu-emergency">
+            <?php if ($emergencyService): ?>
+              <a href="/services/emergency-hvac" role="menuitem" class="megamenu-emergency-card">
+                <?= icon('alert-triangle', 'icon-sm') ?>
+                <span>24/7 Emergency</span>
+                <small><?= e(PHONE_NUMBER) ?></small>
+              </a>
+            <?php endif; ?>
+            <a href="/services" role="menuitem" class="dropdown-link dropdown-link-accent">View all services →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-item has-dropdown">
+        <a href="/service-areas" class="nav-link<?= $isActive('/service-areas') ? ' is-active' : '' ?>"<?= $isActive('/service-areas') ? ' aria-current="page"' : '' ?>>Service Areas</a>
+        <button type="button" class="nav-caret" aria-haspopup="true" aria-expanded="false" aria-controls="areas-dropdown" aria-label="Show service areas menu"><?= icon('chevron-down', 'icon-sm') ?></button>
+        <div class="dropdown" id="areas-dropdown" role="menu" aria-label="Service areas menu">
+          <?php foreach (SERVICE_AREAS as $area): ?>
+            <a href="/service-areas/<?= e($area['slug']) ?>" role="menuitem" class="dropdown-link"><?= e($area['name']) ?></a>
+          <?php endforeach; ?>
+          <a href="/service-areas#zip" role="menuitem" class="dropdown-link dropdown-link-accent">Check your ZIP →</a>
+        </div>
+      </div>
+
+      <?php foreach ($simpleNavLinks as $link): ?>
+        <a href="<?= e($link['path']) ?>" class="nav-link<?= current_path() === $link['path'] ? ' is-active' : '' ?>"<?= current_path() === $link['path'] ? ' aria-current="page"' : '' ?>><?= e($link['label']) ?></a>
       <?php endforeach; ?>
     </nav>
 
@@ -145,21 +182,44 @@ ob_start();
       <img src="/assets/img/okie-logo-nav-260.webp" alt="Okie Heating and Cooling" class="logo-img-sm" width="500" height="200" loading="lazy" decoding="async">
       <button type="button" class="btn btn-ghost btn-icon" id="mobile-menu-close" aria-label="Close menu"><?= icon('x', 'icon') ?></button>
     </div>
+    <a href="<?= PHONE_HREF ?>" class="btn btn-accent btn-lg btn-block mobile-menu-call"><?= icon('phone', 'icon-sm') ?> Call 24/7 — <?= e(PHONE_NUMBER) ?></a>
+
     <nav class="mobile-nav">
-      <?php foreach ($navLinks as $link): ?>
+      <details class="mobile-accordion">
+        <summary class="mobile-nav-link<?= $isActive('/services') ? ' is-active' : '' ?>">Services</summary>
+        <div class="mobile-subnav">
+          <p class="mobile-subnav-heading">Cooling</p>
+          <?php foreach ($svcByCategory['cooling'] as $svc): ?>
+            <a href="/services/<?= e($svc['slug']) ?>" class="mobile-subnav-link"><?= e($svc['title']) ?></a>
+          <?php endforeach; ?>
+          <p class="mobile-subnav-heading">Heating</p>
+          <?php foreach ($svcByCategory['heating'] as $svc): ?>
+            <a href="/services/<?= e($svc['slug']) ?>" class="mobile-subnav-link"><?= e($svc['title']) ?></a>
+          <?php endforeach; ?>
+          <p class="mobile-subnav-heading">More</p>
+          <?php foreach ($svcByCategory['more'] as $svc): ?>
+            <a href="/services/<?= e($svc['slug']) ?>" class="mobile-subnav-link"><?= e($svc['title']) ?></a>
+          <?php endforeach; ?>
+          <a href="/services" class="mobile-subnav-link mobile-subnav-link-accent">View all services →</a>
+        </div>
+      </details>
+
+      <details class="mobile-accordion">
+        <summary class="mobile-nav-link<?= $isActive('/service-areas') ? ' is-active' : '' ?>">Service Areas</summary>
+        <div class="mobile-subnav">
+          <?php foreach (SERVICE_AREAS as $area): ?>
+            <a href="/service-areas/<?= e($area['slug']) ?>" class="mobile-subnav-link"><?= e($area['name']) ?></a>
+          <?php endforeach; ?>
+          <a href="/service-areas#zip" class="mobile-subnav-link mobile-subnav-link-accent">Check your ZIP →</a>
+        </div>
+      </details>
+
+      <?php foreach ($simpleNavLinks as $link): ?>
         <a href="<?= e($link['path']) ?>" class="mobile-nav-link<?= current_path() === $link['path'] ? ' is-active' : '' ?>"><?= e($link['label']) ?></a>
-        <?php if (!empty($link['children'])): ?>
-          <div class="mobile-subnav">
-            <?php foreach ($link['children'] as $child): if ($child['path'] === $link['path']) continue; ?>
-              <a href="<?= e($child['path']) ?>" class="mobile-subnav-link"><?= e($child['label']) ?></a>
-            <?php endforeach; ?>
-          </div>
-        <?php endif; ?>
       <?php endforeach; ?>
     </nav>
     <div class="mobile-menu-ctas">
-      <a href="<?= PHONE_HREF ?>" class="btn btn-outline btn-block"><?= icon('phone', 'icon-sm') ?> <?= e(PHONE_NUMBER) ?></a>
-      <a href="/book" class="btn btn-accent btn-block">Book Service</a>
+      <a href="/book" class="btn btn-outline btn-block">Book Service</a>
     </div>
   </div>
 </aside>
