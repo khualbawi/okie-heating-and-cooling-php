@@ -120,9 +120,10 @@ HTML;
 
 /**
  * Send one email. Returns true on success.
- * $to = ['email'=>..,'name'=>..]; $replyTo optional.
+ * $to = ['email'=>..,'name'=>..]; $replyTo optional. $logRef identifies the
+ * request in a failure log without printing the recipient's address.
  */
-function send_email(array $to, string $subject, string $html, array $tags = [], ?array $replyTo = null): bool
+function send_email(array $to, string $subject, string $html, array $tags = [], ?array $replyTo = null, $logRef = null): bool
 {
     if (BREVO_API_KEY !== '') {
         $payload = [
@@ -160,12 +161,12 @@ function send_email(array $to, string $subject, string $html, array $tags = [], 
     if ($replyTo && !empty($replyTo['email'])) $headers[] = 'Reply-To: ' . $replyTo['email'];
     if (BCC_EMAIL !== '') $headers[] = 'Bcc: ' . BCC_EMAIL;
     $ok = @mail($to['email'], mb_encode_mimeheader($subject), $html, implode("\r\n", $headers));
-    if (!$ok) error_log('mail() failed for ' . $to['email']);
+    if (!$ok) error_log('mail() failed for request #' . ($logRef ?? 'unknown'));
     return $ok;
 }
 
 /** Send both customer confirmation + internal notification. Returns [customerSent, internalSent]. */
-function send_request_emails(array $sr): array
+function send_request_emails(array $sr, $requestId = null): array
 {
     $label = service_type_label($sr['service_type']);
     $isEmergency = $sr['urgency'] === 'emergency';
@@ -176,7 +177,8 @@ function send_request_emails(array $sr): array
             "Service Request Confirmed - {$label}",
             build_customer_email($sr),
             [$sr['service_type'], $sr['form_source'] ?: 'website'],
-            ['email' => ADMIN_EMAIL, 'name' => BRAND_NAME]
+            ['email' => ADMIN_EMAIL, 'name' => BRAND_NAME],
+            $requestId
         );
     }
     $internalSent = send_email(
@@ -184,7 +186,8 @@ function send_request_emails(array $sr): array
         ($isEmergency ? 'EMERGENCY REQUEST: ' : 'New Service Request: ') . "{$label} - {$sr['name']}",
         build_internal_email($sr),
         ['internal-notification', $sr['service_type'], $isEmergency ? 'emergency' : 'standard'],
-        $sr['email'] !== '' ? ['email' => $sr['email'], 'name' => $sr['name']] : null
+        $sr['email'] !== '' ? ['email' => $sr['email'], 'name' => $sr['name']] : null,
+        $requestId
     );
     return [$customerSent, $internalSent];
 }

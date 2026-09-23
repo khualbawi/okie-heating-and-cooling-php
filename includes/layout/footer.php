@@ -102,6 +102,7 @@
   /* Load gtag.js once the page is interactive — or sooner if the visitor acts.
      Events fired before this land in dataLayer and replay on load. */
   (function () {
+    if (window.__gaBlocked) return; // Global Privacy Control — never load gtag.js
     var loaded = false;
     function loadGa() {
       if (loaded) return;

@@ -51,11 +51,24 @@ ob_start();
 <?php if (GA_MEASUREMENT_ID !== ''): ?>
   <script>
     /* gtag queue is available immediately; the 100 KB library itself is fetched
-       after load (or on first interaction) so it never competes with LCP. */
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '<?= e(GA_MEASUREMENT_ID) ?>');
+       after load (or on first interaction) so it never competes with LCP.
+       Global Privacy Control opts the visitor out of analytics entirely: no
+       queue, no library load (see footer.php), no GA cookies. page_location
+       is rebuilt from just origin+pathname+utm_* — no name/zip/city/other
+       query-string value the app puts in a URL ever reaches Google. */
+    window.__gaBlocked = navigator.globalPrivacyControl === true;
+    if (!window.__gaBlocked) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      var okieParams = new URLSearchParams(location.search);
+      var okieKept = new URLSearchParams();
+      okieParams.forEach(function (v, k) { if (k.indexOf('utm_') === 0) okieKept.append(k, v); });
+      var okieQuery = okieKept.toString();
+      gtag('js', new Date());
+      gtag('config', '<?= e(GA_MEASUREMENT_ID) ?>', {
+        page_location: location.origin + location.pathname + (okieQuery ? '?' + okieQuery : '')
+      });
+    }
   </script>
 <?php endif; ?>
   <title><?= e($pageTitle) ?></title>

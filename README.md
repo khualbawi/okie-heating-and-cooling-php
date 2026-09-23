@@ -57,6 +57,14 @@ sitemap.php, robots.txt
    "Performance / caching" below — no manual purge step). If Cloudflare sits in
    front, `cloudflare/purge.sh` is available as an optional manual tool for the
    rare case you need the edge cleared before the next visitor hits it.
+9. **Retention cron** (only needed if a database is configured): hPanel →
+   Advanced → Cron Jobs → add a daily job:
+   ```
+   php /home/USER/public_html/scripts/retention.php
+   ```
+   Deletes `service_requests` older than `RETENTION_YEARS` (default 3, set in
+   `.env`) and `site_events` older than 14 months. No-op without a database.
+   Dry-run first with `php scripts/retention.php --dry-run`.
 
 ## Local dev
 

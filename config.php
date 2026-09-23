@@ -62,6 +62,14 @@ define('EMAIL', 'info@okieheatingandcooling.com');
 define('ADDRESS', 'Serving Tulsa, OK & surrounding areas');
 define('LICENSE_NUMBER', 'OK LIC 00195102');
 
+// Exact wording shown next to the SMS/call consent checkbox — single source of
+// truth so the text stored with a consent record always matches what the
+// customer actually saw (privacy.php §5.4).
+define('CONSENT_TEXT', 'I agree to receive calls and texts from Okie Heating and Cooling about my service request. Msg & data rates may apply. Reply STOP to opt out. Consent is not a condition of purchase. See our Privacy Policy.');
+
+// How long a service request is kept before scripts/retention.php deletes it.
+define('RETENTION_YEARS', (int) env('RETENTION_YEARS', '3'));
+
 const HOURS = [
     'weekday'   => '9:00 AM – 8:00 PM',
     'saturday'  => 'Emergency Only',

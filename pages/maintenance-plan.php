@@ -78,7 +78,7 @@ require SITE_ROOT . '/includes/layout/header.php';
       <?php if ($enrolled): ?>
         <div class="member-form text-center">
           <?= icon('check-circle-big', 'icon-xl accent center mb-3') ?>
-          <p class="h5 mb-1">Thanks<?= !empty($_GET['name']) ? ', ' . e($_GET['name']) : '' ?>!</p>
+          <p class="h5 mb-1">Thanks!</p>
           <p class="small member-muted">We'll be in touch shortly to get you enrolled.</p>
         </div>
       <?php else: ?>
@@ -96,6 +96,10 @@ require SITE_ROOT . '/includes/layout/header.php';
             <input required type="text" name="name" placeholder="Your Name" class="input-plain" aria-label="Your name">
             <input required type="tel" name="phone" placeholder="Phone Number" class="input-plain" aria-label="Phone number">
             <input type="email" name="email" placeholder="Email (optional)" class="input-plain" aria-label="Email">
+            <div class="field-check">
+              <input id="mp-consent" name="consent" type="checkbox" value="1">
+              <label for="mp-consent"><?= str_replace('Privacy Policy', '<a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>', e(CONSENT_TEXT)) ?></label>
+            </div>
             <?php if (TURNSTILE_CONFIGURED): ?>
               <div class="cf-turnstile" data-sitekey="<?= e(TURNSTILE_SITE_KEY) ?>" data-size="flexible" data-theme="light"></div>
               <p class="form-privacy-note">By submitting you agree to our <a href="/privacy">Privacy Policy</a>.</p>

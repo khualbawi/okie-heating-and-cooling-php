@@ -16,7 +16,7 @@ require SITE_ROOT . '/includes/layout/header.php';
 
 <section class="section">
   <div class="container-md legal-content reveal">
-    <p class="legal-draft-notice"><strong>DRAFT — attorney-prepared, pending owner confirmation and final legal review before publication.</strong> Items in <strong>[BRACKETS]</strong> below require owner confirmation before this policy goes live. Sections marked <strong>[IF&nbsp;&hellip;]</strong> must be kept or deleted once that's confirmed. Several commitments in this policy (retention periods, consent records with timestamp/IP/wording, Global Privacy Control handling, analytics URL redaction) describe practices that are <strong>not yet implemented in code</strong> — this page must not go live until those changes ship and match what's written here.</p>
+    <p class="legal-draft-notice"><strong>DRAFT — attorney-prepared, pending owner confirmation and final legal review before publication.</strong> Items in <strong>[BRACKETS]</strong> below require owner confirmation before this policy goes live. Sections marked <strong>[IF&nbsp;&hellip;]</strong> must be kept or deleted once that's confirmed. The practices this policy describes (retention, consent records with timestamp/IP/wording, Global Privacy Control handling, analytics URL redaction) are now implemented in code and match what's written below.</p>
 
     <h2>1. Introduction and Scope</h2>
     <p><strong>1.1</strong> This Privacy Policy (the &ldquo;Policy&rdquo;) describes how Okie Heating and Cooling (&ldquo;Okie,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;), a heating, ventilation, and air conditioning service provider based in Tulsa, Oklahoma, collects, uses, discloses, retains, and protects Personal Information in connection with the website located at <strong>https://okieheatingandcooling.com</strong>, including all of its pages, forms, and features (collectively, the &ldquo;Site&rdquo;).</p>
@@ -135,7 +135,7 @@ require SITE_ROOT . '/includes/layout/header.php';
       <tbody>
         <tr><td>Service Requests submitted through the Site</td><td>[Three (3)] years after the later of the submission date or your most recent service with us, then deleted or de-identified</td></tr>
         <tr><td>Consent records (calls and text messages)</td><td>For as long as the consent is in effect, and for [four (4)] years after it is revoked or expires, to document compliance</td></tr>
-        <tr><td>First-party measurement data</td><td>[Fourteen (14)] months, then deleted</td></tr>
+        <tr><td>First-party measurement data (site_events)</td><td>Fourteen (14) months, then deleted automatically</td></tr>
         <tr><td>Google Analytics data</td><td>[Fourteen (14)] months, per our Google Analytics data-retention setting</td></tr>
         <tr><td>Anti-abuse IP address records (form and login rate limiting)</td><td>Up to one (1) hour; automatically purged</td></tr>
         <tr><td>Server and security logs maintained by our hosting and network providers</td><td>According to those providers' standard retention practices</td></tr>

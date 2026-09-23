@@ -71,7 +71,7 @@ if (isset($_GET['csv'])) {
     header('Content-Type: text/csv; charset=UTF-8');
     header('Content-Disposition: attachment; filename="service-requests-' . date('Y-m-d') . '.csv"');
     $out = fopen('php://output', 'w');
-    $cols = ['id','created_at','status','name','phone','email','service_type','urgency','address','city','preferred_date','preferred_time','customer_type','form_source','utm_source','utm_medium','utm_campaign','consent','issue_description'];
+    $cols = ['id','created_at','status','name','phone','email','service_type','urgency','address','city','preferred_date','preferred_time','customer_type','form_source','utm_source','utm_medium','utm_campaign','consent','consent_at','consent_text','consent_ip','issue_description'];
     fputcsv($out, $cols);
     foreach ($rows as $r) fputcsv($out, array_map(fn($c) => $csvSafe($r[$c] ?? ''), $cols));
     fclose($out);
@@ -105,9 +105,9 @@ select{font:inherit;padding:.125rem}
 </div>
 <div class="wrap">
 <table>
-<thead><tr><th>Date</th><th>Status</th><th>Name</th><th>Phone</th><th>Email</th><th>Service</th><th>Urgency</th><th>Address</th><th>Preferred</th><th>Source</th><th>Description</th></tr></thead>
+<thead><tr><th>Date</th><th>Status</th><th>Name</th><th>Phone</th><th>Email</th><th>Service</th><th>Urgency</th><th>Address</th><th>Preferred</th><th>Source</th><th>Consent</th><th>Description</th></tr></thead>
 <tbody>
-<?php if (!$rows): ?><tr><td colspan="11" class="muted">No requests yet.</td></tr><?php endif; ?>
+<?php if (!$rows): ?><tr><td colspan="12" class="muted">No requests yet.</td></tr><?php endif; ?>
 <?php foreach ($rows as $r): ?>
 <tr>
   <td><?= e($r['created_at'] ?? '') ?></td>
@@ -129,6 +129,7 @@ select{font:inherit;padding:.125rem}
   <td><?= e(trim(($r['address'] ?? '') . ' ' . ($r['city'] ?? ''))) ?: '<span class="muted">—</span>' ?></td>
   <td><?= e(trim(($r['preferred_date'] ?? '') . ' ' . ($r['preferred_time'] ?? ''))) ?: '<span class="muted">—</span>' ?></td>
   <td><?= e($r['form_source'] ?? '') ?><?= !empty($r['utm_source']) ? '<br><span class="muted">' . e($r['utm_source']) . '</span>' : '' ?></td>
+  <td><?php if (!empty($r['consent'])): ?><span class="tag" title="<?= e(($r['consent_text'] ?? '') . ' · IP ' . ($r['consent_ip'] ?? '')) ?>">Yes<?= !empty($r['consent_at']) ? '<br><span class="muted">' . e($r['consent_at']) . '</span>' : '' ?></span><?php else: ?><span class="muted">No</span><?php endif; ?></td>
   <td class="desc"><?= e($r['issue_description'] ?? '') ?></td>
 </tr>
 <?php endforeach; ?>

@@ -123,7 +123,7 @@ $formError = $_GET['error'] ?? '';
 
   <div class="field-check">
     <input id="<?= $uid ?>-consent" name="consent" type="checkbox" value="1">
-    <label for="<?= $uid ?>-consent">I agree to receive calls and texts from Okie Heating and Cooling about my service request. Msg &amp; data rates may apply. Reply STOP to opt out. Consent is not a condition of purchase. See our <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</label>
+    <label for="<?= $uid ?>-consent"><?= str_replace('Privacy Policy', '<a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>', e(CONSENT_TEXT)) ?></label>
   </div>
 
   <?php if (TURNSTILE_CONFIGURED): ?>

@@ -27,8 +27,9 @@ $respond = function (bool $ok, string $message, array $extra = [], int $status =
     }
     $redirect = $_POST['redirect'] ?? '/book';
     if (!str_starts_with($redirect, '/') || str_starts_with($redirect, '//')) $redirect = '/book';
+    // Never put PII (name or otherwise) in the redirect URL — it becomes the
+    // page's own address, which GA's automatic page_view sends to Google.
     $q = $ok ? ['submitted' => '1'] : ['error' => $message];
-    if ($ok && !empty($extra['name'])) $q['name'] = $extra['name'];
     header('Location: ' . $redirect . '?' . http_build_query($q) . ($ok ? '#main-content' : ''), true, 303);
     exit;
 };
@@ -97,11 +98,21 @@ $sr = [
     'utm_medium' => $in('utm_medium', 100),
     'utm_campaign' => $in('utm_campaign', 100),
     'consent' => !empty($_POST['consent']) ? 1 : 0,
+    'consent_at' => null,
+    'consent_text' => null,
+    'consent_ip' => null,
     'status' => 'new',
     'ip' => $_SERVER['REMOTE_ADDR'] ?? '',
     'user_agent' => mb_substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 255),
     'created_at' => date('Y-m-d H:i:s'),
 ];
+if ($sr['consent']) {
+    // Snapshot what the customer actually agreed to — the current CONSENT_TEXT,
+    // not whatever this constant says by the time someone reads the record.
+    $sr['consent_at'] = $sr['created_at'];
+    $sr['consent_text'] = CONSENT_TEXT;
+    $sr['consent_ip'] = $sr['ip'];
+}
 
 $errors = [];
 if ($sr['name'] === '') $errors['name'] = 'Please enter your name.';
@@ -122,7 +133,7 @@ $id = null;
 $stored = false;
 if ($pdo = db()) {
     try {
-        $cols = ['name','phone','email','address','city','service_type','issue_description','preferred_date','preferred_time','urgency','customer_type','form_source','utm_source','utm_medium','utm_campaign','consent','status','ip','user_agent','created_at'];
+        $cols = ['name','phone','email','address','city','service_type','issue_description','preferred_date','preferred_time','urgency','customer_type','form_source','utm_source','utm_medium','utm_campaign','consent','consent_at','consent_text','consent_ip','status','ip','user_agent','created_at'];
         $sql = 'INSERT INTO service_requests (' . implode(',', $cols) . ') VALUES (' . implode(',', array_map(fn($c) => ":$c", $cols)) . ')';
         $stmt = $pdo->prepare($sql);
         foreach ($cols as $c) $stmt->bindValue(":$c", $sr[$c]);
@@ -143,7 +154,7 @@ if (!$stored) {
 }
 
 // --- Emails ------------------------------------------------------------------
-[$customerSent, $internalSent] = send_request_emails($sr);
+[$customerSent, $internalSent] = send_request_emails($sr, $id);
 if ($pdo && is_int($id)) {
     try {
         $pdo->prepare('UPDATE service_requests SET email_sent = :s WHERE id = :id')->execute([':s' => $internalSent ? 1 : 0, ':id' => $id]);

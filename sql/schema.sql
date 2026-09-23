@@ -19,6 +19,9 @@ CREATE TABLE IF NOT EXISTS service_requests (
   utm_medium VARCHAR(100) NOT NULL DEFAULT '',
   utm_campaign VARCHAR(100) NOT NULL DEFAULT '',
   consent TINYINT(1) NOT NULL DEFAULT 0,
+  consent_at DATETIME NULL,
+  consent_text VARCHAR(500) NULL,
+  consent_ip VARCHAR(45) NULL,
   status ENUM('new','contacted','scheduled','completed','cancelled') NOT NULL DEFAULT 'new',
   notes TEXT NULL,
   email_sent TINYINT(1) NOT NULL DEFAULT 0,
@@ -30,6 +33,14 @@ CREATE TABLE IF NOT EXISTS service_requests (
   INDEX idx_status (status),
   INDEX idx_service (service_type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Re-running this file against an already-deployed table (CREATE TABLE above
+-- is a no-op then) still picks up columns added after the table first existed.
+-- Needs MySQL 8.0.29+ / MariaDB 10.0+ for "ADD COLUMN IF NOT EXISTS".
+ALTER TABLE service_requests
+  ADD COLUMN IF NOT EXISTS consent_at DATETIME NULL AFTER consent,
+  ADD COLUMN IF NOT EXISTS consent_text VARCHAR(500) NULL AFTER consent_at,
+  ADD COLUMN IF NOT EXISTS consent_ip VARCHAR(45) NULL AFTER consent_text;
 
 CREATE TABLE IF NOT EXISTS site_events (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
