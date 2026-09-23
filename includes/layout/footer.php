@@ -7,35 +7,48 @@
         <img src="/assets/img/okie-logo-nav-260.webp" alt="Okie Heating and Cooling" class="footer-logo" width="500" height="200" loading="lazy" decoding="async">
       </div>
       <p class="footer-tagline">Tulsa's trusted HVAC professionals. Keeping homes and businesses comfortable year-round with honest, quality service.</p>
-      <div class="footer-contact">
+
+      <div class="footer-contact tablet-up">
         <div class="footer-contact-row"><?= icon('phone', 'icon-sm') ?><div><div class="footer-contact-label">Office &amp; 24/7 Emergency</div><a href="<?= OFFICE_PHONE_HREF ?>"><?= e(OFFICE_PHONE_NUMBER) ?></a></div></div>
         <a href="mailto:<?= e(EMAIL) ?>" class="footer-contact-row"><?= icon('mail', 'icon-sm') ?> <?= e(EMAIL) ?></a>
         <div class="footer-contact-row"><?= icon('map-pin', 'icon-sm') ?> <?= e(ADDRESS) ?></div>
         <div class="footer-contact-row align-start"><?= icon('clock', 'icon-sm') ?><div><p>Mon–Fri: <?= e(HOURS['weekday']) ?></p><p>Sat–Sun: Emergency Only</p></div></div>
       </div>
+
+      <div class="footer-contact-mobile mobile-only">
+        <div class="footer-contact-btns">
+          <a href="<?= OFFICE_PHONE_HREF ?>" class="footer-contact-btn"><?= icon('phone', 'icon-sm') ?> Call</a>
+          <a href="mailto:<?= e(EMAIL) ?>" class="footer-contact-btn"><?= icon('mail', 'icon-sm') ?> Email</a>
+        </div>
+        <p class="footer-hours-line"><?= icon('clock', 'icon-xs') ?> Mon–Fri <?= e(HOURS['weekday']) ?> &middot; Weekends: emergency only</p>
+      </div>
     </div>
 
-    <div>
-      <h4 class="footer-heading">Our Services</h4>
+    <?php
+    // Captured once, rendered twice below (plain column on desktop, native
+    // <details> accordion on mobile) — native details/summary collapse in
+    // current Chrome clips its content via an internal box that a CSS
+    // `display` override on the content can't reach, so forcing one closed
+    // <details> to *look* open on desktop isn't reliable. Two small wrappers
+    // around one captured block sidesteps that instead of fighting it.
+    ob_start(); ?>
       <nav class="footer-links">
         <?php foreach (array_slice(SERVICES, 0, 8) as $svc): ?>
           <a href="/services/<?= e($svc['slug']) ?>"><?= e($svc['title']) ?></a>
         <?php endforeach; ?>
         <a href="/services" class="footer-link-accent">View All Services →</a>
       </nav>
-    </div>
+    <?php $footerServicesNav = ob_get_clean();
 
-    <div>
-      <h4 class="footer-heading">Service Areas</h4>
+    ob_start(); ?>
       <nav class="footer-links">
         <?php foreach (SERVICE_AREAS as $area): ?>
           <a href="/service-areas/<?= e($area['slug']) ?>"><?= e($area['name']) ?>, OK</a>
         <?php endforeach; ?>
       </nav>
-    </div>
+    <?php $footerAreasNav = ob_get_clean();
 
-    <div>
-      <h4 class="footer-heading">Quick Links</h4>
+    ob_start(); ?>
       <nav class="footer-links">
         <a href="/book">Book Service</a>
         <a href="/contact">Contact Us</a>
@@ -47,12 +60,24 @@
         <a href="/financing">Financing</a>
         <a href="/maintenance-plan">Maintenance Plan</a>
       </nav>
-    </div>
+    <?php $footerQuickNav = ob_get_clean();
+
+    $footerCols = ['Our Services' => $footerServicesNav, 'Service Areas' => $footerAreasNav, 'Quick Links' => $footerQuickNav];
+    foreach ($footerCols as $label => $nav): ?>
+      <div class="tablet-up">
+        <h4 class="footer-heading"><?= e($label) ?></h4>
+        <?= $nav ?>
+      </div>
+      <details class="footer-accordion mobile-only">
+        <summary class="footer-heading"><?= e($label) ?></summary>
+        <?= $nav ?>
+      </details>
+    <?php endforeach; ?>
   </div>
   <div class="footer-bottom">
     <div class="container footer-bottom-inner">
       <p>© <?= date('Y') ?> Okie Heating and Cooling. All rights reserved. Oklahoma Mechanical License <?= e(LICENSE_NUMBER) ?> · Licensed &amp; Insured.</p>
-      <div class="footer-bottom-meta"><span>Tulsa, Oklahoma</span></div>
+      <div class="footer-bottom-meta tablet-up"><span>Tulsa, Oklahoma</span></div>
     </div>
   </div>
 </footer>

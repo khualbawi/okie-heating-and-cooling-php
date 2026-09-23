@@ -582,8 +582,7 @@ a.contact-row:hover .muted { color: var(--fg); }
    --------------------------------------------------------------------- */
 @supports (content-visibility: auto) {
   .section:not(:first-of-type),
-  .seo-block,
-  .site-footer {
+  .seo-block {
     content-visibility: auto;
     contain-intrinsic-size: auto 600px;
   }
@@ -713,3 +712,33 @@ a.chip-link:hover { background: var(--accent-15); color: var(--accent); }
 @media (min-width: 768px) { .grid-4.tablet-up { display: grid; } }
 .area-tabs.mobile-only { display: flex; }
 @media (min-width: 768px) { .area-tabs.mobile-only { display: none; } }
+
+/* Mobile footer compaction (<768px): <details> accordions, compact contact
+   block. Desktop keeps the original always-open columns via the >=768
+   override below (details:not([open]) hiding its content is a plain,
+   author-overridable UA-stylesheet rule, so no !important needed). */
+.footer-accordion summary { cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; min-height: 48px; margin-bottom: 0; }
+.footer-accordion summary::-webkit-details-marker { display: none; }
+.footer-accordion summary::after { content: ''; width: .5rem; height: .5rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform .2s ease; flex-shrink: 0; }
+.footer-accordion[open] summary::after { transform: rotate(-135deg); }
+.footer-accordion nav.footer-links { padding-bottom: 1rem; }
+
+.footer-contact-mobile { margin-top: 1rem; }
+.footer-contact-btns { display: flex; gap: .625rem; }
+.footer-contact-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: .375rem; height: 44px; border: 1px solid rgb(255 255 255 / .2); border-radius: .5rem; font-size: .8125rem; font-weight: 600; color: #fff; }
+.footer-contact-btn:hover { background: rgb(255 255 255 / .08); }
+.footer-hours-line { display: flex; align-items: center; gap: .375rem; margin-top: .75rem; font-size: .8125rem; color: rgb(255 255 255 / .65); }
+
+@media (max-width: 767.98px) {
+  .footer-grid { padding-top: 1rem; padding-bottom: .25rem; gap: .5rem; }
+  .footer-brand > * + * { margin-top: .5rem; }
+  .footer-logo { height: 1.5rem; }
+  .footer-logo-wrap { padding: .375rem; }
+  .footer-tagline { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
+  .footer-contact-mobile { margin-top: .5rem; }
+  .footer-contact-btn { height: 40px; }
+  .footer-hours-line { margin-top: .375rem; }
+  .footer-accordion summary { min-height: 44px; }
+  .footer-bottom-inner { padding-top: .5rem; padding-bottom: .5rem; font-size: .6875rem; gap: .25rem; }
+}
+
