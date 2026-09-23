@@ -62,7 +62,7 @@
 </div>
 <div class="mobile-cta-spacer"></div>
 
-<script src="/assets/js/main.js?v=<?= @filemtime(SITE_ROOT . '/assets/js/main.js') ?: '1' ?>" defer></script>
+<script src="/assets/js/main.js?v=<?= deploy_version() ?>" defer></script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <?php if (GA_MEASUREMENT_ID !== ''): ?>
 <script>

@@ -7,8 +7,9 @@
  * second line of defence: a plain file cache so even a LiteSpeed MISS costs one
  * readfile() instead of a full render.
  *
- * Cache key = request path + build id (mtimes of the files that shape output), so a
- * deploy invalidates everything automatically — no manual purge needed.
+ * Cache key = request path + deploy version (short git commit hash), so a deploy
+ * invalidates everything automatically — no manual purge needed. The first request
+ * to see a new version also fires an LiteSpeed edge purge, once.
  */
 declare(strict_types=1);
 
@@ -35,31 +36,107 @@ function page_cache_enabled(): bool
     return $path !== '/sitemap.xml';
 }
 
-/** Build id: changes whenever content or templates change. */
+/**
+ * Deploy version: the short hash of the currently checked-out git commit. Read
+ * straight from the .git plumbing (no `exec()` / process spawn per request).
+ * Falls back to a VERSION file (for non-git deploys), then 'dev'.
+ */
+function deploy_version(): string
+{
+    static $v = null;
+    if ($v !== null) return $v;
+
+    $gitDir = SITE_ROOT . '/.git';
+    if (is_file($gitDir)) {
+        // Worktree checkout: .git is a pointer file, not a directory.
+        $ptr = trim((string) @file_get_contents($gitDir));
+        $gitDir = str_starts_with($ptr, 'gitdir: ') ? trim(substr($ptr, 8)) : false;
+    }
+    if ($gitDir && is_dir($gitDir)) {
+        $commonDir = $gitDir;
+        if (is_file($gitDir . '/commondir')) {
+            $real = @realpath($gitDir . '/' . trim((string) @file_get_contents($gitDir . '/commondir')));
+            if ($real) $commonDir = $real;
+        }
+        $head = trim((string) @file_get_contents($gitDir . '/HEAD'));
+        $hash = '';
+        if (str_starts_with($head, 'ref: ')) {
+            $ref = trim(substr($head, 5));
+            $hash = trim((string) @file_get_contents($commonDir . '/' . $ref));
+            if ($hash === '') {
+                $packed = (string) @file_get_contents($commonDir . '/packed-refs');
+                if (preg_match('/^([0-9a-f]{40})\s+' . preg_quote($ref, '/') . '$/m', $packed, $m)) {
+                    $hash = $m[1];
+                }
+            }
+        } else {
+            $hash = $head; // detached HEAD: HEAD itself holds the hash
+        }
+        if (preg_match('/^[0-9a-f]{7,40}$/', $hash)) {
+            return $v = substr($hash, 0, 12);
+        }
+    }
+
+    $versionFile = SITE_ROOT . '/VERSION';
+    $ver = is_readable($versionFile) ? trim((string) @file_get_contents($versionFile)) : '';
+    return $v = $ver !== '' ? $ver : 'dev';
+}
+
+/** Cache "build id": the deploy version. Kept as its own name since it's what the
+ *  cache key, ETag and Cache-Tag headers actually consume. */
 function page_cache_build_id(): string
 {
-    static $id = null;
-    if ($id !== null) return $id;
-    $stamp = 0;
-    foreach ([
-        '/includes/data.php', '/includes/helpers.php', '/includes/icons.php',
-        '/includes/layout/header.php', '/includes/layout/footer.php',
-        '/assets/css/styles.css', '/assets/js/main.js', '/config.php',
-    ] as $f) {
-        $stamp = max($stamp, (int) @filemtime(SITE_ROOT . $f));
-    }
-    // Page templates and components shape output too — a page-only edit must bust the
-    // cache just like a shared-include edit does.
-    foreach ([...glob(SITE_ROOT . '/pages/*.php') ?: [], ...glob(SITE_ROOT . '/includes/components/*.php') ?: []] as $f) {
-        $stamp = max($stamp, (int) @filemtime($f));
-    }
-    return $id = substr(sha1((string) $stamp . '|' . SITE_URL), 0, 12);
+    return deploy_version();
 }
 
 function page_cache_file(): string
 {
-    $key = sha1(page_cache_build_id() . '|' . current_path());
-    return PAGE_CACHE_DIR . '/' . substr($key, 0, 2) . '/' . $key . '.html';
+    $hash = sha1(current_path());
+    return PAGE_CACHE_DIR . '/' . page_cache_build_id() . '/' . substr($hash, 0, 2) . '/' . $hash . '.html';
+}
+
+/**
+ * Detect a new deploy (git HEAD moved since the last request) and, exactly once,
+ * clear other-version cache files and tell LiteSpeed to drop its edge cache.
+ * File-locked so only the first concurrent request after a deploy does the work.
+ */
+function page_cache_bump_version_if_needed(): void
+{
+    $version = page_cache_build_id();
+    $file = SITE_ROOT . '/storage/deploy-version.txt';
+    $fp = @fopen($file, 'c+');
+    if ($fp === false) return;   // best-effort; a missed purge just means one stale LiteSpeed edge hit
+
+    flock($fp, LOCK_EX);
+    $stored = trim((string) fread($fp, 64));
+    if ($stored !== $version) {
+        ftruncate($fp, 0);
+        rewind($fp);
+        fwrite($fp, $version);
+        fflush($fp);
+        page_cache_purge_other_versions();
+        if (!headers_sent()) header('X-LiteSpeed-Purge: *');
+    } elseif (random_int(1, 100) === 1) {
+        page_cache_purge_other_versions();   // self-heal sweep, same version
+    }
+    flock($fp, LOCK_UN);
+    fclose($fp);
+}
+
+/** Delete cache files left behind by every version except the current one. */
+function page_cache_purge_other_versions(): int
+{
+    $n = 0;
+    $current = page_cache_build_id();
+    foreach (glob(PAGE_CACHE_DIR . '/*', GLOB_ONLYDIR) ?: [] as $dir) {
+        if (basename($dir) === $current) continue;
+        foreach (glob($dir . '/*/*.html') ?: [] as $f) {
+            if (@unlink($f)) $n++;
+        }
+        foreach (glob($dir . '/*', GLOB_ONLYDIR) ?: [] as $sub) @rmdir($sub);
+        @rmdir($dir);
+    }
+    return $n;
 }
 
 /**
@@ -68,6 +145,8 @@ function page_cache_file(): string
  */
 function page_cache_start(): void
 {
+    page_cache_bump_version_if_needed();
+
     if (!page_cache_enabled()) {
         page_cache_no_store();
         return;
@@ -127,17 +206,6 @@ function page_cache_write(string $html): void
     if (@file_put_contents($tmp, $html, LOCK_EX) !== false) {
         @rename($tmp, $with);   // atomic: readers never see a half-written page
     }
-    page_cache_gc();
-}
-
-/** Occasionally drop stale files (old build ids leave orphans behind). */
-function page_cache_gc(): void
-{
-    if (random_int(1, 50) !== 1) return;
-    $cutoff = time() - (PAGE_CACHE_TTL * 2);
-    foreach (glob(PAGE_CACHE_DIR . '/*/*.html') ?: [] as $f) {
-        if ((int) @filemtime($f) < $cutoff) @unlink($f);
-    }
 }
 
 /** Cache headers for browsers, CDNs and LiteSpeed. */
@@ -188,14 +256,4 @@ function page_cache_no_store(): void
     header_remove('X-LiteSpeed-Tag');
     header_remove('ETag');
     header_remove('Last-Modified');
-}
-
-/** Delete every cached page (used by admin purge). */
-function page_cache_purge(): int
-{
-    $n = 0;
-    foreach (glob(PAGE_CACHE_DIR . '/*/*.html') ?: [] as $f) {
-        if (@unlink($f)) $n++;
-    }
-    return $n;
 }

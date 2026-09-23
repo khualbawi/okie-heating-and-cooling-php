@@ -21,7 +21,7 @@ pages/                  one file per route (home, services, service-detail, …,
 api/
   submit-request.php    POST handler: validate → store (MySQL or JSONL) → email
   track.php             page-view / event logger (DB only)
-admin/requests.php      lead inbox + CSV export (Basic-auth, needs ADMIN_PASSWORD)
+admin/requests.php      lead inbox + status update + CSV export (Basic-auth, needs ADMIN_PASSWORD)
 assets/css|js|img       styles.css, main.js, logos/favicons
 sql/schema.sql          MySQL tables (optional)
 storage/                JSONL fallback storage (web-blocked)
@@ -53,14 +53,10 @@ sitemap.php, robots.txt
 6. **DNS**: point the domain at Hostinger, enable free SSL in hPanel. The `.htaccess`
    forces HTTPS + non-www — if Hostinger's own redirect is on, you can remove that block.
 7. **Search Console**: resubmit `https://okieheatingandcooling.com/sitemap.xml`.
-8. **Purge caches after every deploy** — new HTML is invisible until all three cache
-   layers clear:
-   ```bash
-   ADMIN_PASSWORD=... ./scripts/post-deploy-purge.sh https://okieheatingandcooling.com
-   ```
-   Clears the app file cache + LiteSpeed edge, and the Cloudflare edge if
-   `CF_API_TOKEN`/`CF_ZONE_ID` are set. (The app cache also self-busts on deploy via
-   its build id — see below — but LiteSpeed and Cloudflare don't know about that.)
+8. **Deploy**: push to `main`; caches self-invalidate on the first request (see
+   "Performance / caching" below — no manual purge step). If Cloudflare sits in
+   front, `cloudflare/purge.sh` is available as an optional manual tool for the
+   rare case you need the edge cleared before the next visitor hits it.
 
 ## Local dev
 
@@ -106,14 +102,22 @@ component runs, so no page needs a hardcoded bypass list — because the form em
 `Cache-Control: private, no-store` plus `CDN-Cache-Control: no-store` and
 `X-LiteSpeed-Cache-Control: no-cache`.
 
-**Invalidation** — the cache key includes a build id derived from the mtimes of
-`data.php`, `helpers.php`, `icons.php`, the layout files, `styles.css`, `main.js`,
-`config.php`, every `pages/*.php` and every `includes/components/*.php`. Deploying any
-of those invalidates every cached page automatically (app layer only — LiteSpeed and
-Cloudflare still need an explicit purge, see "Deploy to Hostinger" above).
-Manual purge: `/admin/requests.php?purge=1` (also sends `X-LiteSpeed-Purge: *`).
+**Invalidation** — fully automatic, no admin step. The cache key includes the deploy
+version: the short hash of the currently checked-out git commit (`deploy_version()`
+in `includes/cache.php`, read straight from `.git/HEAD` — falls back to a `VERSION`
+file for non-git deploys, then `'dev'`). A `git push` to `main` means the very next
+request runs against a new version, gets a guaranteed cache miss, and — exactly
+once, file-locked so concurrent requests don't race — deletes the previous version's
+cache files and sends `X-LiteSpeed-Purge: *` to drop the LiteSpeed edge too.
+Cloudflare respects the origin's `CDN-Cache-Control`, so it naturally serves the new
+version once its own TTL expires (or immediately for any page marked `no-store`);
+`cloudflare/purge.sh` is there if you want it gone from the edge sooner.
 Kill switch: `PAGE_CACHE=0` in `.env`. Response header `X-Page-Cache: HIT|MISS` shows
 what happened.
+
+Local dev iterating on templates: since the cache key is now the git commit (not
+file mtimes), an uncommitted edit won't bust the local cache. Set `PAGE_CACHE=0` in
+your local `.env` while actively editing, or just commit as you go.
 
 **Front-end**
 
@@ -126,7 +130,8 @@ what happened.
   never waits on `main.js`. Only below-the-fold `.reveal` blocks use IntersectionObserver.
 - Below-the-fold sections use `content-visibility: auto` with an intrinsic size.
 - Page-view telemetry fires on `requestIdleCallback`.
-- Static assets: `Cache-Control: immutable`, 1 year; CSS/JS are cache-busted with `?v=<mtime>`.
+- Static assets: `Cache-Control: immutable`, 1 year; CSS/JS are cache-busted with
+  `?v=<deploy-version>` (same git-commit hash as the page cache — see below).
 - Brotli (falling back to gzip) for all text responses.
 
 **Cloudflare CDN** — see `cloudflare/README.md`. Cacheable pages send

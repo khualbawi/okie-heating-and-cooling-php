@@ -70,9 +70,10 @@ assets carry `Cache-Tag: asset`. Purge by tag is available on every plan.
 ./cloudflare/purge.sh home services   # just those pages
 ```
 
-The origin's own file cache purges itself on deploy (mtime-derived build id) and can
-be cleared at `/admin/requests.php?purge=1`. That does **not** clear Cloudflare — run
-`purge.sh` too after a content change, or wait out the 1-day edge TTL.
+The origin's own file cache purges itself automatically on deploy (the cache key is
+the git commit hash — see main `README.md` → Performance / caching) and also fires
+an `X-LiteSpeed-Purge: *` on the first request after a deploy. Neither clears
+Cloudflare — run `purge.sh` too after a content change, or wait out the 1-day edge TTL.
 
 ## Verifying
 

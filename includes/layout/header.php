@@ -12,7 +12,7 @@ $seo = array_merge([
     'image' => abs_url('assets/img/okie-logo-hero.png'),
 ], $seo ?? []);
 
-$cssVer  = @filemtime(SITE_ROOT . '/assets/css/styles.css') ?: '1';
+$cssVer  = deploy_version();
 
 $pageTitle = build_title($seo['title']);
 $canonical = abs_url($seo['path']);

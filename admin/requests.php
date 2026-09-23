@@ -14,13 +14,13 @@ if (ADMIN_PASSWORD === '') {
     exit('Not found');
 }
 
-// --- Failed-auth throttle: max 10 bad attempts per IP per 15 minutes ---------
+// --- Failed-auth throttle: max 5 bad attempts per IP per 15 minutes ----------
 $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 $throttleFile = SITE_ROOT . '/storage/admin-auth-fails.json';
 $fails = is_readable($throttleFile) ? (json_decode((string) file_get_contents($throttleFile), true) ?: []) : [];
 $now = time();
 $fails = array_values(array_filter($fails, fn($t) => is_array($t) && ($t['ts'] ?? 0) > $now - 900));
-if (count(array_filter($fails, fn($t) => ($t['ip'] ?? '') === $ip)) >= 10) {
+if (count(array_filter($fails, fn($t) => ($t['ip'] ?? '') === $ip)) >= 5) {
     http_response_code(429);
     header('Retry-After: 900');
     exit('Too many attempts. Try again later.');
@@ -37,16 +37,6 @@ if ($user !== 'admin' || !hash_equals(ADMIN_PASSWORD, $pass)) {
 }
 header('X-Robots-Tag: noindex, nofollow');
 header('Cache-Control: no-store');
-
-// Manual full purge: /admin/requests.php?purge=1
-// Clears the app file cache and, via the response header, the LiteSpeed edge cache.
-require SITE_ROOT . '/includes/cache.php';
-if (isset($_GET['purge'])) {
-    $n = page_cache_purge();
-    header('X-LiteSpeed-Purge: *');
-    header('Location: /admin/requests.php?purged=' . $n, true, 303);
-    exit;
-}
 
 // --- Load rows ---------------------------------------------------------------
 $rows = [];
@@ -104,10 +94,6 @@ select{font:inherit;padding:.125rem}
 <h1>Service Requests <span class="muted">(<?= count($rows) ?>, source: <?= $source ?>)</span></h1>
 <div class="bar">
   <a href="?csv=1">⬇ Export CSV</a>
-  <a href="?purge=1">♻ Purge page cache</a>
-<?php if (isset($_GET['purged'])): ?>
-  <span class="muted">Cleared <?= (int) $_GET['purged'] ?> cached page(s).</span>
-<?php endif; ?>
   <a href="/">← Back to site</a>
 </div>
 <div class="wrap">
