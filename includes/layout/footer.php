@@ -116,4 +116,5 @@
 <?php endif; ?>
 </body>
 </html>
+<!-- v:<?= e(deploy_version()) ?> -->
 <?php echo strip_raw_placeholders(ob_get_clean()); ?>

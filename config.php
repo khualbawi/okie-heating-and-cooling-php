@@ -123,3 +123,18 @@ if (env('APP_DEBUG', '0') === '1') {
 }
 
 date_default_timezone_set('America/Chicago');
+
+// ---------------------------------------------------------------------------
+// Deploy guardrail: catches config drift (a stray duplicate config file, or a
+// deploy that landed without a .env) before it causes a silent split-brain
+// config. error_log only — never shown to visitors, safe in production.
+// ---------------------------------------------------------------------------
+(function (): void {
+    $configFiles = glob(SITE_ROOT . '/config*.php') ?: [];
+    if (count($configFiles) > 1) {
+        error_log('DEPLOY GUARDRAIL: multiple config files found on disk (' . implode(', ', array_map('basename', $configFiles)) . ') — only config.php should exist. A stray duplicate can silently diverge from the real one; delete it.');
+    }
+    if (!is_readable(SITE_ROOT . '/.env')) {
+        error_log('DEPLOY GUARDRAIL: .env is missing — every setting is running on its code default (see the separate Turnstile log line above for that specific gap).');
+    }
+})();
