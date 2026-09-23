@@ -25,6 +25,15 @@ const CONTENT = [
     // Reviews / footer / homepage links
     'GOOGLE_REVIEWS_URL' => null,
     'GOOGLE_REVIEW_WRITE_URL' => null,
+    'GOOGLE_RATING' => null,
+    'GOOGLE_REVIEW_COUNT' => null,
+
+    // JSON-LD sameAs / geo — omitted from schema until real values are supplied
+    'GBP_URL' => null,
+    'FACEBOOK_URL' => null,
+    'YELP_URL' => null,
+    'LAT' => null,
+    'LNG' => null,
 
     // Financing specials (also gated by active_financing_specials()'s date filter)
     'SPECIAL_1_TITLE' => null, 'SPECIAL_1_PRICE' => null, 'SPECIAL_1_EXPIRY' => null,

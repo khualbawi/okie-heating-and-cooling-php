@@ -1,7 +1,7 @@
 <?php
 $seo = [
     'title' => 'About Okie Heating & Cooling',
-    'description' => 'Locally owned HVAC company serving Tulsa, OK with honest pricing, expert technicians, and reliable heating and cooling service.',
+    'description' => 'Locally owned HVAC company serving Tulsa, OK with honest pricing, background-checked technicians, and reliable heating and cooling repair service.',
     'path' => '/about',
 ];
 $values = [

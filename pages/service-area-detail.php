@@ -1,9 +1,10 @@
 <?php
 /** @var array $area */
 $hub = area_hub($area['slug']);
+$areaTitleFull = $area['name'] . ' HVAC Repair & Installation | ' . BRAND_NAME;
 $seo = [
-    'title' => 'HVAC Repair & Installation in ' . $area['name'] . ', OK',
-    'description' => $area['seoText'] ?: $area['description'],
+    'title' => strlen($areaTitleFull) <= 60 ? $areaTitleFull : $area['name'] . ' HVAC Repair | ' . BRAND_NAME,
+    'description' => meta_trim($area['seoText'] ?: $area['description']),
     'path' => '/service-areas/' . $area['slug'],
     'jsonLd' => area_business_jsonld($area),
     'extraJsonLd' => !empty($area['faqs']) ? faq_jsonld($area['faqs']) : null,

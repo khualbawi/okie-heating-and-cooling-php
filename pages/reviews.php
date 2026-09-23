@@ -1,7 +1,7 @@
 <?php
 $seo = [
     'title' => 'Customer Reviews',
-    'description' => 'Read real reviews from Tulsa homeowners and businesses. See why Okie Heating & Cooling is trusted for 5-star HVAC service.',
+    'description' => 'Read real Google reviews from Tulsa-area homeowners and businesses. See why Okie Heating and Cooling is trusted for honest, reliable HVAC service.',
     'path' => '/reviews',
 ];
 $reviewCount = count(REVIEWS);
@@ -33,7 +33,9 @@ $stars5 = str_repeat(icon('star', 'icon-sm star-on'), 5);
     </div>
     <div class="google-box reveal">
       <div class="stars center mb-3"><?= $stars5 ?></div>
-      <p class="h5 mb-1">5.0 · 18 reviews on Google</p>
+      <?php if (has_content('GOOGLE_RATING') && has_content('GOOGLE_REVIEW_COUNT')): ?>
+        <p class="h5 mb-1"><?= e(content('GOOGLE_RATING') . ' · ' . content('GOOGLE_REVIEW_COUNT') . ' reviews on Google') ?></p>
+      <?php endif; ?>
       <p class="small muted mb-4">See all our reviews on Google Maps</p>
       <div class="btn-row center">
         <a href="https://www.google.com/maps/search/Okie+Heating+and+Cooling+Jenks+OK" target="_blank" rel="noopener noreferrer" class="btn btn-primary">View on Google Maps</a>

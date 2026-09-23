@@ -34,6 +34,25 @@ function build_title(?string $pageTitle): string
     return "$pageTitle | $base";
 }
 
+/** Trim long copy to a 140-155 char meta description, cutting at a sentence or word boundary. */
+function meta_trim(string $text, int $min = 140, int $max = 155): string
+{
+    $text = trim(preg_replace('/\s+/', ' ', $text));
+    if (strlen($text) <= $max) {
+        return $text;
+    }
+    foreach (['. ', '! ', '? '] as $sep) {
+        $pos = strrpos(substr($text, 0, $max + 1), $sep);
+        if ($pos !== false && $pos + 1 >= $min && $pos + 1 <= $max) {
+            return substr($text, 0, $pos + 1);
+        }
+    }
+    $cut = substr($text, 0, $max);
+    $sp = strrpos($cut, ' ');
+    $best = ($sp !== false && $sp >= $min) ? rtrim(substr($cut, 0, $sp)) : rtrim($cut);
+    return rtrim($best, ' ,;:-');
+}
+
 /** Render a component/partial with scoped variables. */
 function component(string $name, array $vars = []): void
 {
@@ -90,7 +109,7 @@ function service_type_label(string $value): string
 function local_business_jsonld(): array
 {
     $cities = array_values(array_unique(array_merge(['Tulsa'], array_column(SERVICE_AREAS, 'name'))));
-    return [
+    $data = [
         '@context' => 'https://schema.org',
         '@type' => 'HVACBusiness',
         'name' => BRAND_NAME,
@@ -113,13 +132,6 @@ function local_business_jsonld(): array
             'opens' => '09:00',
             'closes' => '20:00',
         ]],
-        'aggregateRating' => [
-            '@type' => 'AggregateRating',
-            'ratingValue' => '5',
-            'reviewCount' => '18',
-            'bestRating' => '5',
-            'worstRating' => '1',
-        ],
         'priceRange' => '$$',
         'paymentAccepted' => 'Cash, Credit Card, Financing',
         'hasCredential' => [
@@ -129,6 +141,29 @@ function local_business_jsonld(): array
             'identifier' => LICENSE_NUMBER,
         ],
     ];
+
+    // Only ever the real, verified Google numbers — never invented, never left
+    // stale if /reviews shows a different count.
+    if (has_content('GOOGLE_RATING') && has_content('GOOGLE_REVIEW_COUNT')) {
+        $data['aggregateRating'] = [
+            '@type' => 'AggregateRating',
+            'ratingValue' => content('GOOGLE_RATING'),
+            'reviewCount' => content('GOOGLE_REVIEW_COUNT'),
+            'bestRating' => '5',
+            'worstRating' => '1',
+        ];
+    }
+
+    $sameAs = array_values(array_filter([content('GBP_URL'), content('FACEBOOK_URL'), content('YELP_URL')]));
+    if ($sameAs) {
+        $data['sameAs'] = $sameAs;
+    }
+
+    if (has_content('LAT') && has_content('LNG')) {
+        $data['geo'] = ['@type' => 'GeoCoordinates', 'latitude' => content('LAT'), 'longitude' => content('LNG')];
+    }
+
+    return $data;
 }
 
 /** Local business JSON-LD scoped to a single service area (service-area-detail pages). */

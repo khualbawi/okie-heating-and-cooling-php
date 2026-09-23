@@ -1,7 +1,7 @@
 <?php
 $seo = [
     'title' => 'Contact & Inquiries',
-    'description' => 'Have a question or need a quote? Send an inquiry to Okie Heating & Cooling. For scheduling service, use our Book Service page.',
+    'description' => 'Have a question or need a quote? Send an inquiry to Okie Heating and Cooling. For scheduling service directly, use our online Book Service page.',
     'path' => '/contact',
 ];
 require SITE_ROOT . '/includes/layout/header.php';

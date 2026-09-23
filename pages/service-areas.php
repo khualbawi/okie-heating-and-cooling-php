@@ -1,7 +1,7 @@
 <?php
 $seo = [
     'title' => 'HVAC Service Areas',
-    'description' => 'Okie Heating & Cooling serves Tulsa and nearby communities including Broken Arrow, Owasso, Bixby, Jenks, Sand Springs, Sapulpa, and Glenpool. Check your ZIP code.',
+    'description' => 'Okie Heating and Cooling serves Tulsa and nearby cities including Broken Arrow, Owasso, Bixby, Jenks, Sand Springs, Sapulpa, and Glenpool, OK.',
     'path' => '/service-areas',
 ];
 

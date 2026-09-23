@@ -2,9 +2,10 @@
 /** @var array $service (set by router) */
 $pagePath = '/services/' . $service['slug'];
 $pageDesc = $service['heroSubheadline'] ?: $service['description'];
+$svcTitleWithCity = $service['title'] . ' in Tulsa, OK | ' . BRAND_NAME;
 $seo = [
-    'title' => $service['title'] . ' in Tulsa, OK',
-    'description' => $pageDesc,
+    'title' => strlen($svcTitleWithCity) <= 60 ? $svcTitleWithCity : $service['title'] . ' | ' . BRAND_NAME,
+    'description' => meta_trim($service['description']),
     'path' => $pagePath,
     'jsonLd' => service_jsonld($service['title'] . ' in Tulsa, OK', abs_url($pagePath), $pageDesc),
     'extraJsonLd' => faq_jsonld($service['faqs']),

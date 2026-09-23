@@ -1,7 +1,7 @@
 <?php
 $seo = [
     'title' => 'Book HVAC Service',
-    'description' => 'Schedule your HVAC service in minutes. Submit a request online and our team will confirm your appointment quickly.',
+    'description' => 'Schedule HVAC service online in minutes with Okie Heating and Cooling. Submit a request and our Tulsa team will confirm your appointment quickly.',
     'path' => '/book',
 ];
 $preSelected = preg_replace('/[^a-z_]/', '', (string) ($_GET['service'] ?? ''));

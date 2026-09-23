@@ -1,7 +1,7 @@
 <?php
 $seo = [
     'title' => 'HVAC Maintenance Plans',
-    'description' => 'Prevent breakdowns and save money with a maintenance membership. Priority scheduling, discounts, and seasonal tune-ups in Tulsa, OK.',
+    'description' => 'Prevent breakdowns and save money with an HVAC maintenance membership from Okie Heating and Cooling. Priority scheduling, discounts, and tune-ups.',
     'path' => '/maintenance-plan',
 ];
 $springItems = ['Clean and flush condensation drain pipe', 'Condenser deep cleaning', 'Test condenser fan & compressor run capacitors (MFD)', 'Check voltage and electrical current to condenser unit', 'Replace filters (up to 2)', 'Remove leaves, twigs, and debris from around condenser', 'Check refrigerant levels if needed', 'Test Delta-T for cooling performance'];

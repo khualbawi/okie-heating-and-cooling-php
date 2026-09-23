@@ -1,6 +1,6 @@
 <?php
 $seo = [
-    'title' => 'Tulsa HVAC Repair, Installation & Maintenance',
+    'title' => 'Tulsa HVAC Repair & Installation | Okie Heating & Cooling',
     'description' => 'Okie Heating & Cooling provides trusted HVAC services in Tulsa, OK. AC repair, heating repair, installation, maintenance, and 24/7 emergency service.',
     'path' => '/',
     'extraJsonLd' => faq_jsonld(HOME_FAQS),

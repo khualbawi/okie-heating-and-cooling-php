@@ -1,7 +1,7 @@
 <?php
 $seo = [
     'title' => 'HVAC Financing & Specials',
-    'description' => 'Flexible HVAC financing options for system replacements and major repairs in Tulsa, OK. Ask about seasonal specials.',
+    'description' => 'Flexible HVAC financing options for system replacements and major repairs in Tulsa, OK. Ask about current seasonal specials and promotions today.',
     'path' => '/financing',
 ];
 $benefits = ['Low monthly payments', 'Quick and easy application', 'Competitive interest rates', 'Flexible terms available', 'No prepayment penalties', 'Apply in minutes'];
