@@ -83,6 +83,7 @@
         <a href="/accessibility">Accessibility</a>
       </nav>
       <div class="footer-bottom-meta tablet-up"><span>Tulsa, Oklahoma</span></div>
+      <p class="footer-credit">Powered by <a href="https://khual.net/?utm_source=okieheatingandcooling&amp;utm_medium=referral&amp;utm_campaign=powered_by" target="_blank" rel="noopener" aria-label="KhualWS (opens in a new tab)">KhualWS</a></p>
     </div>
   </div>
 </footer>
