@@ -34,6 +34,10 @@ $navLinks = [
     ['label' => 'Reviews', 'path' => '/reviews'],
     ['label' => 'Contact', 'path' => '/contact'],
 ];
+
+// Safety net for a raw {{PLACEHOLDER}} that slips past template logic — closed
+// and filtered in footer.php via strip_raw_placeholders().
+ob_start();
 ?>
 <!DOCTYPE html>
 <html lang="en" class="no-js">

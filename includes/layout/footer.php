@@ -41,7 +41,9 @@
         <a href="/contact">Contact Us</a>
         <a href="/about">About Us</a>
         <a href="/reviews">Reviews</a>
-        <a href="{{GOOGLE_REVIEW_WRITE_URL}}" target="_blank" rel="noopener noreferrer">Leave Us a Review</a>
+        <?php if (has_content('GOOGLE_REVIEW_WRITE_URL')): ?>
+          <a href="<?= e(content('GOOGLE_REVIEW_WRITE_URL')) ?>" target="_blank" rel="noopener noreferrer">Leave Us a Review</a>
+        <?php endif; ?>
         <a href="/financing">Financing</a>
         <a href="/maintenance-plan">Maintenance Plan</a>
       </nav>
@@ -87,3 +89,4 @@
 <?php endif; ?>
 </body>
 </html>
+<?php echo strip_raw_placeholders(ob_get_clean()); ?>

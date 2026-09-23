@@ -10,7 +10,7 @@ $whyUs = [
     ['shield', 'Licensed & Insured', 'Fully licensed (' . LICENSE_NUMBER . '), insured, and background-checked technicians you can trust in your home.'],
     ['zap', 'Upfront Pricing', 'No surprises. We provide clear, honest pricing before any work begins.'],
     ['users', 'Locally Owned', "We're your Tulsa neighbors. Invested in our community and your comfort."],
-    ['star', '5-Star Service', 'Rated 5.0★ on Google by Tulsa homeowners.', '{{GOOGLE_REVIEWS_URL}}'],
+    ['star', '5-Star Service', 'Rated 5.0★ on Google by Tulsa homeowners.', content('GOOGLE_REVIEWS_URL')],
     ['check-circle', 'Guaranteed Work', 'We stand behind every repair and installation with a satisfaction guarantee.'],
 ];
 require SITE_ROOT . '/includes/layout/header.php';
@@ -40,8 +40,6 @@ require SITE_ROOT . '/includes/layout/header.php';
     <div class="hero-badges hero-area-trust reveal" data-delay="4"><?php component('trust-badges', ['variant' => 'compact', 'exclude' => ['24/7 Emergency', 'Satisfaction Guaranteed']]); ?></div>
   </div>
 </section>
-
-<section class="trust-bar"><div class="container"><?php component('trust-badges'); ?></div></section>
 
 <?php
 $homeServiceSlugs = ['ac-repair', 'ac-installation', 'ac-maintenance', 'heating-repair', 'heating-installation', 'heating-maintenance', 'furnace-repair', 'furnace-installation', 'emergency-hvac'];
@@ -133,13 +131,5 @@ $homeServices = array_filter(SERVICES, fn($s) => in_array($s['slug'], $homeServi
 <?php component('faq-section', ['faqs' => HOME_FAQS, 'title' => 'Common Questions', 'subtitle' => 'Quick answers about our HVAC services in Tulsa']); ?>
 
 <?php component('cta-banner', ['variant' => 'dark', 'showPhone' => false]); ?>
-
-<section class="seo-block">
-  <div class="container-sm prose">
-    <h3>Your Trusted HVAC Company in Tulsa, Oklahoma</h3>
-    <p>Okie Heating and Cooling is a locally owned and operated HVAC company proudly serving Tulsa, Oklahoma and the surrounding communities including Broken Arrow, Owasso, Bixby, Jenks, Sand Springs, Sapulpa, and Glenpool. We specialize in residential and commercial heating and cooling services including AC repair, heating repair, furnace installation, air conditioning installation, indoor air quality solutions, and 24/7 emergency HVAC service.</p>
-    <p>Whether you need a quick AC repair on a hot Tulsa summer day or a complete heating system installation before winter, our certified technicians deliver fast, reliable service with upfront pricing and a satisfaction guarantee. We service all major HVAC brands and are committed to keeping Tulsa homes and businesses comfortable year-round.</p>
-  </div>
-</section>
 
 <?php require SITE_ROOT . '/includes/layout/footer.php'; ?>

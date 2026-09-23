@@ -7,6 +7,7 @@ declare(strict_types=1);
 require __DIR__ . '/config.php';
 require __DIR__ . '/includes/helpers.php';
 require __DIR__ . '/includes/data.php';
+require __DIR__ . '/includes/content.php';
 require __DIR__ . '/includes/cache.php';
 
 $path = current_path();

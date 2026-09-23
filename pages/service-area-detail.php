@@ -8,6 +8,7 @@ $seo = [
     'extraJsonLd' => !empty($area['faqs']) ? faq_jsonld($area['faqs']) : null,
 ];
 $areaToken = strtoupper(str_replace([' ', '-'], '_', $area['name']));
+$areaIntro = fill_content($area['intro'], $area['introTokens'] ?? []) ?? $area['introFallback'];
 $areaReview = null;
 foreach (HOME_TESTIMONIALS as $t) {
     if (str_starts_with($t['location'] ?? '', $area['name'] . ',')) { $areaReview = $t; break; }
@@ -31,7 +32,7 @@ require SITE_ROOT . '/includes/layout/header.php';
 
 <section class="section-sm">
   <div class="container-md reveal">
-    <p class="lead muted leading-relaxed"><?= e($area['intro']) ?></p>
+    <p class="lead muted leading-relaxed"><?= e($areaIntro) ?></p>
   </div>
 </section>
 
@@ -60,17 +61,21 @@ require SITE_ROOT . '/includes/layout/header.php';
   </div>
 </section>
 
+<?php if (has_content('RECENT_JOB_' . $areaToken) || $areaReview): ?>
 <section class="section">
   <div class="container-md reveal">
-    <div class="card">
-      <h3 class="h5 mb-3">Recent Job in <?= e($area['name']) ?></h3>
-      <p class="muted">{{RECENT_JOB_<?= e($areaToken) ?>}}</p>
-    </div>
+    <?php if (has_content('RECENT_JOB_' . $areaToken)): ?>
+      <div class="card">
+        <h3 class="h5 mb-3">Recent Job in <?= e($area['name']) ?></h3>
+        <p class="muted"><?= e(content('RECENT_JOB_' . $areaToken)) ?></p>
+      </div>
+    <?php endif; ?>
     <?php if ($areaReview): ?>
       <div class="mt-6"><?php component('testimonial-card', ['t' => $areaReview]); ?></div>
     <?php endif; ?>
   </div>
 </section>
+<?php endif; ?>
 
 <?php if (!empty($area['faqs'])): ?>
   <?php component('faq-section', ['faqs' => $area['faqs'], 'title' => 'Questions From ' . $area['name'] . ' Homeowners']); ?>

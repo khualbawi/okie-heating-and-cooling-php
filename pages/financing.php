@@ -42,12 +42,18 @@ require SITE_ROOT . '/includes/layout/header.php';
           <div class="inline-icon small"><?= icon('check-circle', 'icon-xs accent') ?> <span><?= e($b) ?></span></div>
         <?php endforeach; ?>
       </div>
-      <div class="text-center mt-6">
-        <p class="small muted mb-1">Financing through {{FINANCING_PARTNER}}</p>
-        <p class="h4 mb-4">As low as ${{FINANCING_SAMPLE_PAYMENT}}/mo<sup class="small muted">*</sup></p>
-        <a href="{{FINANCING_APPLY_URL}}" target="_blank" rel="noopener noreferrer" class="btn btn-accent btn-lg">Apply Now <?= icon('arrow-right', 'icon-sm') ?></a>
-        <p class="small muted-60 mt-3">*Sample payment for qualifying credit. Terms vary by approval.</p>
-      </div>
+      <?php if (has_content('FINANCING_APPLY_URL')): ?>
+        <div class="text-center mt-6">
+          <?php if (has_content('FINANCING_PARTNER')): ?>
+            <p class="small muted mb-1">Financing through <?= e(content('FINANCING_PARTNER')) ?></p>
+          <?php endif; ?>
+          <?php if (has_content('FINANCING_SAMPLE_PAYMENT')): ?>
+            <p class="h4 mb-4">As low as $<?= e(content('FINANCING_SAMPLE_PAYMENT')) ?>/mo<sup class="small muted">*</sup></p>
+          <?php endif; ?>
+          <a href="<?= e(content('FINANCING_APPLY_URL')) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-accent btn-lg">Apply Now <?= icon('arrow-right', 'icon-sm') ?></a>
+          <p class="small muted-60 mt-3">*Sample payment for qualifying credit. Terms vary by approval.</p>
+        </div>
+      <?php endif; ?>
     </div>
   </div>
 </section>

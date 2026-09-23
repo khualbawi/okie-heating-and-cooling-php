@@ -34,24 +34,33 @@ require SITE_ROOT . '/includes/layout/header.php';
   </div>
 </section>
 
+<?php if (has_content('OWNER_STORY')): ?>
 <section class="section">
   <div class="container-sm reveal">
     <div class="card card-xl">
       <div class="owner-grid">
         <div class="owner-photo-wrap">
-          <!-- No photo on file yet — swap for <img src="{{OWNER_PHOTO}}" alt="Khai {{OWNER_LAST_NAME}}, owner of Okie Heating and Cooling" width="200" height="200" loading="lazy" decoding="async"> once supplied. -->
-          <div class="owner-photo-fallback" aria-hidden="true">K</div>
+          <?php if (has_content('OWNER_PHOTO')): ?>
+            <img src="<?= e(content('OWNER_PHOTO')) ?>" alt="Khai<?= has_content('OWNER_LAST_NAME') ? ' ' . e(content('OWNER_LAST_NAME')) : '' ?>, owner of Okie Heating and Cooling" width="200" height="200" loading="lazy" decoding="async">
+          <?php else: ?>
+            <div class="owner-photo-fallback" aria-hidden="true">K</div>
+          <?php endif; ?>
         </div>
         <div>
           <p class="eyebrow">Meet the Owner</p>
-          <h2 class="h3 mb-1">Khai {{OWNER_LAST_NAME}}</h2>
-          <p class="small muted mb-4">Founder &amp; Owner, est. {{YEAR_FOUNDED}} · {{OWNER_CERTS}}</p>
-          <p class="muted">{{OWNER_STORY}}</p>
+          <h2 class="h3 mb-1">Khai<?= has_content('OWNER_LAST_NAME') ? ' ' . e(content('OWNER_LAST_NAME')) : '' ?></h2>
+          <?php $ownerMeta = array_filter([
+              has_content('YEAR_FOUNDED') ? 'Founder &amp; Owner, est. ' . e(content('YEAR_FOUNDED')) : (has_content('OWNER_CERTS') ? 'Founder &amp; Owner' : null),
+              has_content('OWNER_CERTS') ? e(content('OWNER_CERTS')) : null,
+          ]); ?>
+          <?php if ($ownerMeta): ?><p class="small muted mb-4"><?= implode(' &middot; ', $ownerMeta) ?></p><?php endif; ?>
+          <p class="muted"><?= e(content('OWNER_STORY')) ?></p>
         </div>
       </div>
     </div>
   </div>
 </section>
+<?php endif; ?>
 
 <section class="section bg-muted-50">
   <div class="container-md text-center reveal">
