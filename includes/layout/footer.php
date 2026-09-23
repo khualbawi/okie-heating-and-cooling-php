@@ -57,11 +57,13 @@
   </div>
 </footer>
 
+<?php $onAreasHub = current_path() === '/service-areas'; ?>
+<?php if ($onAreasHub): ?><div class="mobile-cta-note">🔥 24/7 emergency service in every area</div><?php endif; ?>
 <div class="mobile-cta">
   <a href="<?= PHONE_HREF ?>" class="mobile-cta-call"><?= icon('phone', 'icon-sm') ?> Call Now</a>
   <a href="/book" class="mobile-cta-book"><?= icon('calendar', 'icon-sm') ?> Book Service</a>
 </div>
-<div class="mobile-cta-spacer"></div>
+<div class="mobile-cta-spacer<?= $onAreasHub ? ' has-note' : '' ?>"></div>
 
 <script src="/assets/js/main.js?v=<?= deploy_version() ?>" defer></script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>

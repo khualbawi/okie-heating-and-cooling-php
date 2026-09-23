@@ -188,3 +188,112 @@
   if ('requestIdleCallback' in window) requestIdleCallback(function () { track('page_view'); }, { timeout: 4000 });
   else setTimeout(function () { track('page_view'); }, 1200);
 })();
+
+// Service Areas hub: ZIP checker, List/Map toggle, dot<->card hover sync.
+(function () {
+  var form = document.querySelector('[data-zip-form]');
+  if (!form) return;
+
+  var input = form.querySelector('[data-zip-input]');
+  var resultBox = form.querySelector('[data-zip-result]');
+  var dataEl = document.getElementById('zip-lookup-data');
+  var zipMap = {};
+  try { zipMap = dataEl ? JSON.parse(dataEl.textContent) : {}; } catch (e) { zipMap = {}; }
+  var phoneHref = form.getAttribute('data-phone-href') || 'tel:';
+  var phone = form.getAttribute('data-phone') || '';
+
+  function setActiveCity(slug) {
+    document.querySelectorAll('.is-active').forEach(function (el) {
+      if (el.matches('[data-city]')) el.classList.remove('is-active');
+    });
+    if (!slug) return;
+    document.querySelectorAll('[data-city="' + slug + '"]').forEach(function (el) {
+      el.classList.add('is-active');
+    });
+  }
+
+  function renderResult(zip) {
+    var digits = zip.replace(/\D/g, '');
+    if (digits.length !== 5) {
+      resultBox.innerHTML = '<div class="zip-result-box zip-result-invalid">Enter a 5-digit ZIP code.</div>';
+      resultBox.hidden = false;
+      setActiveCity(null);
+      return;
+    }
+    var match = zipMap[digits];
+    if (match) {
+      resultBox.innerHTML =
+        '<div class="zip-result-box zip-result-match">' +
+        '<p>&#10003; Yes, we serve ' + digits + ' (' + escapeHtml(match.name) + ')</p>' +
+        '<div class="btn-row"><a href="/book?city=' + encodeURIComponent(match.slug) + '" class="btn btn-primary btn-sm">Book in ' + escapeHtml(match.name) + '</a>' +
+        '<a href="' + escapeHtml(phoneHref) + '" class="btn btn-outline btn-sm">Call</a></div></div>';
+      setActiveCity(match.slug);
+    } else {
+      resultBox.innerHTML =
+        '<div class="zip-result-box zip-result-miss"><p>' + digits + ' is outside our usual area. Call and we\'ll see what we can do.</p>' +
+        '<a href="' + escapeHtml(phoneHref) + '" class="btn btn-outline btn-sm">Call ' + escapeHtml(phone) + '</a></div>';
+      setActiveCity(null);
+    }
+    resultBox.hidden = false;
+  }
+
+  function escapeHtml(s) {
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  if (input) {
+    input.addEventListener('input', function () {
+      input.value = input.value.replace(/\D/g, '').slice(0, 5);
+      resultBox.hidden = true;
+      resultBox.innerHTML = '';
+      setActiveCity(null);
+    });
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    renderResult(input ? input.value : '');
+  });
+
+  // List / Map toggle (mobile) --------------------------------------------
+  var tabs = document.querySelectorAll('[data-area-tab]');
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      var target = tab.getAttribute('data-area-tab');
+      tabs.forEach(function (t) {
+        var active = t === tab;
+        t.classList.toggle('is-active', active);
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      document.querySelectorAll('[data-area-panel]').forEach(function (panel) {
+        panel.hidden = panel.getAttribute('data-area-panel') !== target;
+      });
+    });
+  });
+
+  // Dot <-> card/row hover sync (event delegation) -------------------------
+  function setHover(slug, on) {
+    if (!slug) return;
+    document.querySelectorAll('[data-city="' + slug + '"]').forEach(function (el) {
+      el.classList.toggle('is-hover', on);
+    });
+  }
+  document.addEventListener('mouseover', function (e) {
+    var el = e.target.closest('[data-city]');
+    if (el) setHover(el.getAttribute('data-city'), true);
+  });
+  document.addEventListener('mouseout', function (e) {
+    var el = e.target.closest('[data-city]');
+    if (el) setHover(el.getAttribute('data-city'), false);
+  });
+  document.addEventListener('focusin', function (e) {
+    var el = e.target.closest('[data-city]');
+    if (el) setHover(el.getAttribute('data-city'), true);
+  });
+  document.addEventListener('focusout', function (e) {
+    var el = e.target.closest('[data-city]');
+    if (el) setHover(el.getAttribute('data-city'), false);
+  });
+})();
